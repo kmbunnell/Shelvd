@@ -1,4 +1,4 @@
-package com.example.shelvd.ui.theme
+package com.shelvd.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

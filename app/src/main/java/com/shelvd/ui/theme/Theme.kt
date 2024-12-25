@@ -1,4 +1,4 @@
-package com.example.shelvd.ui.theme
+package com.shelvd.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

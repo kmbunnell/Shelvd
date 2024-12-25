@@ -1,4 +1,4 @@
-package com.example.shelvd.ui
+package com.shelvd.ui
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

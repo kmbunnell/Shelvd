@@ -1,6 +1,6 @@
-package com.example.shelvd.data.repo
+package com.shelvd.data.repo
 
-import com.example.shelvd.data.model.Book
+import com.shelvd.data.model.Book
 import javax.inject.Inject
 
 
