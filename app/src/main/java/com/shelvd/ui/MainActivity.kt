@@ -18,18 +18,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val currentState by viewModel.state.collectAsState()
-
             ShelvdTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     BookListScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        state = currentState
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
