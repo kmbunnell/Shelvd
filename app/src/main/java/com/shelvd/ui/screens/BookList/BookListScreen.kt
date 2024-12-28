@@ -1,4 +1,4 @@
-package com.shelvd.ui.screens
+package com.shelvd.ui.screens.BookList
 
 
 import android.util.Log
@@ -19,8 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.shelvd.ui.BookIntent
-import com.shelvd.ui.BookListViewState
 import com.shelvd.ui.MainViewModel
 
 

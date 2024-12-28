@@ -2,8 +2,8 @@ package com.example.shelvd.ui
 
 
 import com.shelvd.data.repo.DefaultBookRepository
-import com.shelvd.ui.BookIntent
-import com.shelvd.ui.BookListViewState
+import com.shelvd.ui.screens.BookList.BookIntent
+import com.shelvd.ui.screens.BookList.BookListViewState
 import com.shelvd.ui.MainViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers

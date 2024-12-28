@@ -1,4 +1,4 @@
-package com.shelvd.ui
+package com.shelvd.ui.screens.BookList
 
 import com.shelvd.data.model.Book
 

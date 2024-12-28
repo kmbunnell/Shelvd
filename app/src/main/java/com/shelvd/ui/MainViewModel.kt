@@ -2,6 +2,8 @@ package com.shelvd.ui
 
 import androidx.lifecycle.ViewModel
 import com.shelvd.data.repo.DefaultBookRepository
+import com.shelvd.ui.screens.BookList.BookIntent
+import com.shelvd.ui.screens.BookList.BookListViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
