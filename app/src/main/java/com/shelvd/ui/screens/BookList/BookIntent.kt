@@ -1,4 +1,4 @@
-package com.shelvd.ui
+package com.shelvd.ui.screens.BookList
 
 sealed class BookIntent {
     object LoadBooks: BookIntent()
