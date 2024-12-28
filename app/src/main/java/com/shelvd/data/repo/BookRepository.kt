@@ -20,12 +20,10 @@ class DefaultBookRepository @Inject constructor(): BookRepository {
           bookList.add(Book("Brigid Kemmerer", "Defy the Night"))
           bookList.add(Book("Brandon Sanderson", "Mistborn: The final Empire"))
       }
-        return bookList
+        return bookList.toList()
     }
 
     override fun addBook() {
-       bookList.add(Book("A Darker Shade of Magic", "VE Schwab"))
+       bookList.add(Book("VE Schwab", "A Darker Shade of Magic"))
     }
-
-
 }
