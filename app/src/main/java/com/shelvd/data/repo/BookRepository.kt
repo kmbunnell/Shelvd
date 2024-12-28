@@ -7,6 +7,7 @@ import javax.inject.Inject
 interface BookRepository {
      fun getBooks(): List<Book>
      fun addBook()
+     fun removeBook(idx:Int)
 }
 
 class DefaultBookRepository @Inject constructor(): BookRepository {
@@ -26,4 +27,9 @@ class DefaultBookRepository @Inject constructor(): BookRepository {
     override fun addBook() {
        bookList.add(Book("VE Schwab", "A Darker Shade of Magic"))
     }
+
+    override fun removeBook(idx: Int) {
+       bookList.removeAt(idx)
+    }
+
 }

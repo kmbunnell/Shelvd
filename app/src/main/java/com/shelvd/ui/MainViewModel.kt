@@ -1,6 +1,5 @@
 package com.shelvd.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.shelvd.data.repo.DefaultBookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,34 +13,37 @@ class MainViewModel @Inject constructor(private val repository: DefaultBookRepos
     val state: StateFlow<BookListViewState> = _state
 
 
-    init{
+    init {
         handleIntent(BookIntent.LoadBooks)
     }
 
     fun handleIntent(intent: BookIntent) {
-            when (intent) {
-                is BookIntent.LoadBooks -> getBookList()
-                BookIntent.AddBook -> addBook()
-                BookIntent.RemoveBook -> TODO()
-            }
-
+        when (intent) {
+            BookIntent.LoadBooks -> getBookList()
+            BookIntent.AddBook -> addBook()
+            is BookIntent.RemoveBook -> removeBook(intent.idx)
+        }
     }
 
     private fun getBookList() {
-
         _state.value = BookListViewState.Loading
         _state.value = try {
             val books = repository.getBooks()
-            Log.d("TST", "getBookList: ${books.size}")
             BookListViewState.BooksLoaded(books)
         } catch (e: Exception) {
             BookListViewState.Error("Wrong")
-
         }
     }
-    private fun addBook(){
-        Log.d("TST", "addBook")
+
+    private fun addBook() {
         repository.addBook()
         getBookList()
+    }
+
+    private fun removeBook(idx: Int) {
+        if (idx != -1) {
+            repository.removeBook(idx)
+            getBookList()
+        }
     }
 }
