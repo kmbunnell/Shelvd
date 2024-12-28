@@ -46,4 +46,31 @@ class MainViewModelTest {
             val loadedState = vm.state.value as BookListViewState.BooksLoaded
             assertTrue(loadedState.books.isNotEmpty())
     }
+
+    @Test
+    fun `add book`() = runTest(UnconfinedTestDispatcher()) {
+        val vm = MainViewModel(repo)
+        vm.handleIntent(BookIntent.AddBook)
+        val loadedState = vm.state.value as BookListViewState.BooksLoaded
+        assertTrue(loadedState.books.isNotEmpty())
+        assertTrue(loadedState.books.size==5)
+    }
+
+    @Test
+    fun `remove book`() = runTest(UnconfinedTestDispatcher()) {
+        val vm = MainViewModel(repo)
+        vm.handleIntent(BookIntent.RemoveBook(2))
+        val loadedState = vm.state.value as BookListViewState.BooksLoaded
+        assertTrue(loadedState.books.isNotEmpty())
+        assertTrue(loadedState.books.size==3)
+    }
+
+    @Test
+    fun `remove book no change when idx -1`() = runTest(UnconfinedTestDispatcher()) {
+        val vm = MainViewModel(repo)
+        vm.handleIntent(BookIntent.RemoveBook(-1))
+        val loadedState = vm.state.value as BookListViewState.BooksLoaded
+        assertTrue(loadedState.books.isNotEmpty())
+        assertTrue(loadedState.books.size==4)
+    }
 }

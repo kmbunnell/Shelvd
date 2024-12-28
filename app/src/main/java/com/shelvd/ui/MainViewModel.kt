@@ -13,22 +13,37 @@ class MainViewModel @Inject constructor(private val repository: DefaultBookRepos
     val state: StateFlow<BookListViewState> = _state
 
 
-    fun handleIntent(intent: BookIntent) {
-            when (intent) {
-                is BookIntent.LoadBooks -> getBookList()
-            }
+    init {
+        handleIntent(BookIntent.LoadBooks)
+    }
 
+    fun handleIntent(intent: BookIntent) {
+        when (intent) {
+            BookIntent.LoadBooks -> getBookList()
+            BookIntent.AddBook -> addBook()
+            is BookIntent.RemoveBook -> removeBook(intent.idx)
+        }
     }
 
     private fun getBookList() {
         _state.value = BookListViewState.Loading
-
         _state.value = try {
-            BookListViewState.BooksLoaded(repository.getBooks())
+            val books = repository.getBooks()
+            BookListViewState.BooksLoaded(books)
         } catch (e: Exception) {
             BookListViewState.Error("Wrong")
-
         }
     }
 
+    private fun addBook() {
+        repository.addBook()
+        getBookList()
+    }
+
+    private fun removeBook(idx: Int) {
+        if (idx != -1) {
+            repository.removeBook(idx)
+            getBookList()
+        }
+    }
 }
