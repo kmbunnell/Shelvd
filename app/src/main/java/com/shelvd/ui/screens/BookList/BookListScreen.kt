@@ -17,16 +17,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.shelvd.ui.MainViewModel
 
 
 @Composable
 fun BookListScreen(modifier: Modifier = Modifier) {
-    val viewModel: MainViewModel = viewModel()
+     Text(modifier = Modifier.padding(top = 50.dp), text = "Books")
+    /*val viewModel: MainViewModel = viewModel()
     val currentState by viewModel.state.collectAsStateWithLifecycle()
-    BookListContent(currentState, viewModel::handleIntent)
+    BookListContent(currentState, viewModel::handleIntent)*/
+
 
 }
 
