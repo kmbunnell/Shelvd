@@ -16,6 +16,7 @@ class DefaultShelfRepository @Inject constructor(): ShelfRepository {
     override fun getShelves(): List<Shelf> {
         if(shelfList.size == 0) {
             shelfList.add(Shelf("Owned", 1))
+            shelfList.add(Shelf("Pre-ordered", 2))
         }
         return shelfList.toList()
     }

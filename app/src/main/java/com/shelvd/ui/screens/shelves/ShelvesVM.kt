@@ -1,7 +1,6 @@
 package com.shelvd.ui.screens.shelves
 
 import androidx.lifecycle.ViewModel
-import com.shelvd.data.repo.BookRepository
 import com.shelvd.data.repo.ShelfRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
