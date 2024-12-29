@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Shelvd</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="create_shelf">Create Shelf</string>
+    <string name="home">Home</string>
+    <string name="add_book">Add Book</string>
 </resources>
