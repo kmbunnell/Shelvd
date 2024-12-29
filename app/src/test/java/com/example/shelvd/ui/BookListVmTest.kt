@@ -5,6 +5,7 @@ import com.shelvd.data.repo.DefaultBookRepository
 import com.shelvd.ui.screens.BookList.BookIntent
 import com.shelvd.ui.screens.BookList.BookListViewState
 import com.shelvd.ui.MainViewModel
+import com.shelvd.ui.screens.BookList.BookListVM
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +21,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MainViewModelTest {
+class BookListVmTest {
 
     private val repo = DefaultBookRepository()
     @OptIn(DelicateCoroutinesApi::class)
@@ -40,7 +41,7 @@ class MainViewModelTest {
 
     @Test
     fun `load books`() = runTest(UnconfinedTestDispatcher()) {
-          val vm = MainViewModel(repo)
+          val vm = BookListVM(repo)
             vm.handleIntent(BookIntent.LoadBooks)
             assertEquals(vm.state.value, BookListViewState.BooksLoaded(repo.getBooks()))
             val loadedState = vm.state.value as BookListViewState.BooksLoaded
@@ -49,7 +50,7 @@ class MainViewModelTest {
 
     @Test
     fun `add book`() = runTest(UnconfinedTestDispatcher()) {
-        val vm = MainViewModel(repo)
+        val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.AddBook)
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
         assertTrue(loadedState.books.isNotEmpty())
@@ -58,7 +59,7 @@ class MainViewModelTest {
 
     @Test
     fun `remove book`() = runTest(UnconfinedTestDispatcher()) {
-        val vm = MainViewModel(repo)
+        val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.RemoveBook(2))
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
         assertTrue(loadedState.books.isNotEmpty())
@@ -67,7 +68,7 @@ class MainViewModelTest {
 
     @Test
     fun `remove book no change when idx -1`() = runTest(UnconfinedTestDispatcher()) {
-        val vm = MainViewModel(repo)
+        val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.RemoveBook(-1))
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
         assertTrue(loadedState.books.isNotEmpty())

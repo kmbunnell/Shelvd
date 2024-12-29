@@ -9,7 +9,6 @@ interface ShelfRepository {
     fun removeShelf(idx:Int)
 }
 
-
 class DefaultShelfRepository @Inject constructor(): ShelfRepository {
 
     private val shelfList: MutableList<Shelf> = mutableListOf()
