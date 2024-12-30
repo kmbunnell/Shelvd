@@ -1,14 +1,14 @@
 package com.shelvd.ui.screens.shelves
 
 import androidx.lifecycle.ViewModel
-import com.shelvd.data.repo.ShelfRepository
+import com.shelvd.data.model.Shelf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class ShelvesVM @Inject constructor(private val shelvesRepo:ShelfRepository): ViewModel() {
+class ShelvesVM @Inject constructor(): ViewModel() {
     private val _state = MutableStateFlow<ShelvesViewState>(ShelvesViewState.Loading)
     val state: StateFlow<ShelvesViewState> = _state
 
@@ -27,8 +27,7 @@ class ShelvesVM @Inject constructor(private val shelvesRepo:ShelfRepository): Vi
     {
         _state.value = ShelvesViewState.Loading
         _state.value = try {
-            val shelves = shelvesRepo.getShelves()
-            ShelvesViewState.ShelvesList(shelves)
+            ShelvesViewState.ShelvesList(Shelf.entries)
         } catch (e: Exception) {
             ShelvesViewState.Error("Wrong")
         }

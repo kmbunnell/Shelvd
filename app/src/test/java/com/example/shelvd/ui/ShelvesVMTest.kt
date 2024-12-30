@@ -1,6 +1,6 @@
 package com.example.shelvd.ui
 
-import com.shelvd.data.repo.DefaultShelfRepository
+import com.shelvd.data.model.Shelf
 import com.shelvd.ui.screens.shelves.ShelvesIntent
 import com.shelvd.ui.screens.shelves.ShelvesVM
 import com.shelvd.ui.screens.shelves.ShelvesViewState
@@ -13,14 +13,14 @@ import org.junit.Test
 
 class ShelvesVMTest {
 
-    private val repo = DefaultShelfRepository()
+
     @OptIn(ExperimentalCoroutinesApi::class)
 
     @Test
     fun `load shelves`() = runTest(UnconfinedTestDispatcher()) {
-        val vm = ShelvesVM(repo)
+        val vm = ShelvesVM()
         vm.handleIntent(ShelvesIntent.getShelvesList)
-        assertEquals(vm.state.value, ShelvesViewState.ShelvesList(repo.getShelves()))
+        assertEquals(vm.state.value, ShelvesViewState.ShelvesList(shelves = Shelf.entries))
         val loadedState = vm.state.value as ShelvesViewState.ShelvesList
         assertTrue(loadedState.shelves.isNotEmpty())
     }

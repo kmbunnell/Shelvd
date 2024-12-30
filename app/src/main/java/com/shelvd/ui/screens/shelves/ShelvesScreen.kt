@@ -48,7 +48,7 @@ fun ShelvesContent(shelvesList:List<Shelf>, onAction: (ShelvesIntent) -> Unit)
         LazyRow {
             items(shelvesList.size) { idx ->
                  Text(
-                    text =shelvesList[idx].title,
+                    text =shelvesList[idx].name,
                     modifier = Modifier.padding(horizontal = 5.dp).selectable(
                         selected = selectedIndex == idx,
                         onClick = { selectedIndex = if (selectedIndex == idx) -1 else idx })
