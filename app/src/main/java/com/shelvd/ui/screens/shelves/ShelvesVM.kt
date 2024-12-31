@@ -1,37 +1,39 @@
 package com.shelvd.ui.screens.shelves
 
 import androidx.lifecycle.ViewModel
-import com.shelvd.data.repo.ShelfRepository
+import androidx.lifecycle.viewModelScope
+import com.shelvd.data.model.Shelf
+import com.shelvd.domain.LoadBooksForShelf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ShelvesVM @Inject constructor(private val shelvesRepo:ShelfRepository): ViewModel() {
+class ShelvesVM @Inject constructor(val loadBooksForShelf: LoadBooksForShelf): ViewModel() {
     private val _state = MutableStateFlow<ShelvesViewState>(ShelvesViewState.Loading)
     val state: StateFlow<ShelvesViewState> = _state
 
-
     init {
-        handleIntent(ShelvesIntent.getShelvesList)
+        handleIntent(ShelvesIntent.LoadBooks(Shelf.OWNED))
     }
 
     fun handleIntent(intent: ShelvesIntent) {
         when (intent) {
-            ShelvesIntent.getShelvesList -> loadShelfList()
+            is ShelvesIntent.LoadBooks -> { loadBooks(intent.shelf) }
         }
     }
 
-    private fun loadShelfList()
+    private fun loadBooks(shelf:Shelf)
     {
         _state.value = ShelvesViewState.Loading
-        _state.value = try {
-            val shelves = shelvesRepo.getShelves()
-            ShelvesViewState.ShelvesList(shelves)
-        } catch (e: Exception) {
-            ShelvesViewState.Error("Wrong")
+        viewModelScope.launch {
+            _state.value = try {
+                ShelvesViewState.ShelvedBooks(loadBooksForShelf.invoke(shelf))
+            } catch (e: Exception) {
+                ShelvesViewState.Error("Wrong")
+            }
         }
     }
-
 }
