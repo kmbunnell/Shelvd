@@ -23,6 +23,7 @@ class DefaultBookRepository @Inject constructor(): BookRepository {
           bookList.add(Book("Brandon Sanderson", "Mistborn: The final Empire", Shelf.OWNED))
           bookList.add(Book("Brigid Kemmerer", "Carving Shadows Into Gold", Shelf.PREORDERED))
           bookList.add(Book("Brynne Weaver", "Scythe and Sparrow", Shelf.PREORDERED))
+          bookList.add(Book("Jennifer Armentrout", "A Soul of Blood and Ash", Shelf.WANT))
       }
         return bookList.toList()
     }

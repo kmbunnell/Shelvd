@@ -1,6 +1,8 @@
 package com.shelvd.ui.screens.shelves
 
+import com.shelvd.data.model.Shelf
+
 sealed class ShelvesIntent {
-    object getShelvesList: ShelvesIntent()
+    data class LoadBooks(val shelf: Shelf):ShelvesIntent()
 
 }
