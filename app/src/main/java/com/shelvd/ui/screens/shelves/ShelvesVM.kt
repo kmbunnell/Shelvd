@@ -3,7 +3,7 @@ package com.shelvd.ui.screens.shelves
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shelvd.data.model.Shelf
-import com.shelvd.domain.LoadBooksForShelf
+import com.shelvd.domain.LoadBooksForShelfUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ShelvesVM @Inject constructor(val loadBooksForShelf: LoadBooksForShelf): ViewModel() {
+class ShelvesVM @Inject constructor(
+    val loadBooksForShelf: LoadBooksForShelfUseCase,
+    ): ViewModel() {
     private val _state = MutableStateFlow<ShelvesViewState>(ShelvesViewState.Loading)
     val state: StateFlow<ShelvesViewState> = _state
 

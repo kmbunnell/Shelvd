@@ -16,12 +16,31 @@ import javax.inject.Qualifier
 @Qualifier
 annotation class DefaultDispatcher
 
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class IoDispatcher
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class MainDispatcher
+
 @Module
 @InstallIn(SingletonComponent::class)
 object ShelvdModule {
     @Provides
     @DefaultDispatcher
     fun provideDefaultDispatcher() : CoroutineDispatcher = Dispatchers.Default
+
+
+    @Provides
+    @IoDispatcher
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+
+    @Provides
+    @MainDispatcher
+    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+
 }
 
 
