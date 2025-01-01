@@ -1,11 +1,14 @@
 package com.shelvd.di
 
+import android.content.Context
 import com.shelvd.data.repo.BookRepository
 import com.shelvd.data.repo.DefaultBookRepository
+import com.shelvd.domain.ScanBookUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +44,8 @@ object ShelvdModule {
     @MainDispatcher
     fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
+    @Provides
+    fun providesScanBookUseCase(@ApplicationContext appContext: Context)= ScanBookUseCase(appContext)
 }
 
 

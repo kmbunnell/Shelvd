@@ -4,7 +4,6 @@ import com.shelvd.data.model.Book
 import com.shelvd.data.model.Shelf
 import com.shelvd.data.repo.BookRepository
 import com.shelvd.domain.LoadBooksForShelfUseCase
-import com.shelvd.ui.screens.shelves.ShelvesViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
