@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class LoadBooksForShelf @Inject constructor(
+class LoadBooksForShelfUseCase @Inject constructor(
     private val bookRepository: BookRepository,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ){
