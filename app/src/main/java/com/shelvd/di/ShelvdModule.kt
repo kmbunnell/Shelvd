@@ -6,6 +6,7 @@ import com.shelvd.data.api.OpenLibraryApiImpl
 import com.shelvd.data.model.Util
 import com.shelvd.data.repo.BookRepository
 import com.shelvd.data.repo.DefaultBookRepository
+import com.shelvd.domain.IsbnLookUpUseCase
 import com.shelvd.domain.ScanBookUseCase
 import dagger.Binds
 import dagger.Module
@@ -60,6 +61,9 @@ object ShelvdModule {
     @Provides
     fun providesScanBookUseCase(@ApplicationContext appContext: Context)= ScanBookUseCase(appContext)
 
+    @Provides
+    fun providesIsbnLookUpUseCase(apiService: ApiSevice)= IsbnLookUpUseCase(apiService)
+
     @Singleton
     @Provides
     fun provideHttpClient(): HttpClient {
@@ -73,7 +77,11 @@ object ShelvdModule {
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
             }
             install(ContentNegotiation){
-                json(Json)
+                json(Json{
+                    ignoreUnknownKeys = true
+                    isLenient = true
+
+                })
             }
         }
     }
@@ -93,10 +101,5 @@ abstract class ShelvdBindsModule{
         defaultBookRepository: DefaultBookRepository
     ):BookRepository
 
-
-    @Binds
-    abstract fun bindApiService(
-        openLibraryApiImpl: OpenLibraryApiImpl
-    ): ApiSevice
 }
 

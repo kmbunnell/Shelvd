@@ -1,9 +1,5 @@
 package com.shelvd.data.model.authorData
 
-import com.shelvd.data.model.bookData.Created
-import com.shelvd.data.model.bookData.LastModified
-import com.shelvd.data.model.bookData.Type
-
 @kotlinx.serialization.Serializable
 data class AuthorData(val photos: List<Long>,
                       val name: String,
