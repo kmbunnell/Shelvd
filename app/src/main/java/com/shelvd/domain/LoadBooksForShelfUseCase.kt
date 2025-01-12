@@ -1,6 +1,6 @@
 package com.shelvd.domain
 
-import com.shelvd.data.model.Book
+import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.model.Shelf
 import com.shelvd.data.repo.BookRepository
 import com.shelvd.di.DefaultDispatcher
@@ -14,7 +14,7 @@ class LoadBooksForShelfUseCase @Inject constructor(
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ){
 
-    suspend operator fun invoke(shelf: Shelf): List<Book> =
+    suspend operator fun invoke(shelf: Shelf): List<ShelvedBook> =
         withContext(defaultDispatcher) {
             bookRepository.getBooks().filter { it.shelf == shelf }
         }

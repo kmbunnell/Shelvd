@@ -1,7 +1,6 @@
 package com.example.shelvd.ui
 
-import android.util.Log
-import com.shelvd.data.model.Book
+import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.model.Shelf
 import com.shelvd.domain.LoadBooksForShelfUseCase
 import com.shelvd.ui.screens.shelves.ShelvesVM
@@ -24,9 +23,9 @@ class ShelvesVMTest {
     val mockBookService:LoadBooksForShelfUseCase = mock()
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = UnconfinedTestDispatcher()
-    val testOwnedBooks= listOf(
-        Book("Kristina Bunnell", "Most Amazing Book Ever", Shelf.OWNED),
-        Book("K Bear", "Hot Vampires", Shelf.OWNED)
+    val testOwnedShelvedBooks= listOf(
+        ShelvedBook("Kristina Bunnell", "Most Amazing Book Ever", Shelf.OWNED),
+        ShelvedBook("K Bear", "Hot Vampires", Shelf.OWNED)
     )
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -44,9 +43,9 @@ class ShelvesVMTest {
 
     @Test
     fun `load books`() = runTest(testDispatcher) {
-        whenever(mockBookService.invoke(Shelf.OWNED)).thenReturn(testOwnedBooks)
+        whenever(mockBookService.invoke(Shelf.OWNED)).thenReturn(testOwnedShelvedBooks)
         val vm = ShelvesVM(mockBookService)
-        assertEquals(vm.state.value, ShelvesViewState.ShelvedBooks(books = testOwnedBooks))
+        assertEquals(vm.state.value, ShelvesViewState.ShelvedBooks(shelvedBooks = testOwnedShelvedBooks))
 
     }
 }

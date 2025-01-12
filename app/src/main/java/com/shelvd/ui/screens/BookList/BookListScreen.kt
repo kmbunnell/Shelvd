@@ -36,12 +36,12 @@ fun BookListContent(state: BookListViewState, onAction: (BookIntent) -> Unit) {
     }
     when (state) {
         is BookListViewState.BooksLoaded -> {
-            Log.d("TST", "BookListContent: BooksLoaded: ${state.books.size}")
+            Log.d("TST", "BookListContent: BooksLoaded: ${state.shelvedBooks.size}")
             Column {
                 LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
-                    items(state.books.size) { idx ->
+                    items(state.shelvedBooks.size) { idx ->
                         Text(
-                            text = state.books[idx].title,
+                            text = state.shelvedBooks[idx].title,
                             modifier = Modifier.selectable(
                                 selected = selectedIndex == idx,
                                 onClick = { selectedIndex = if (selectedIndex == idx) -1 else idx })

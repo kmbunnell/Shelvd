@@ -1,6 +1,20 @@
 package com.shelvd.data.model
 
-data class Book (val author:String, val title:String, val shelf: Shelf = Shelf.MISC)
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
+@Serializable
+data class Book(
+    val docs: List<Doc>
+)
+
+@Serializable
+data class Doc(
+    @JsonNames("author_name")
+    val authorName: List<String>,
+    @JsonNames("cover_edition_key")
+    val coverEditionKey: String,
+    val title: String,
+)
 
