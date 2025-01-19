@@ -4,6 +4,8 @@ import android.content.Context
 import com.shelvd.data.api.OpenLibraryApiImpl
 import com.shelvd.data.Util
 import com.shelvd.data.api.ApiService
+import com.shelvd.data.model.IsbnScanner
+import com.shelvd.data.model.IsbnScannerImpl
 import com.shelvd.data.repo.BookRepository
 import com.shelvd.data.repo.DefaultBookRepository
 import com.shelvd.domain.IsbnLookUpUseCase
@@ -59,8 +61,14 @@ object ShelvdModule {
     fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Provides
-    fun providesScanBookUseCase(@ApplicationContext appContext: Context)= ScanBookUseCase(
-        appContext,
+    fun providesScanBookUseCase(isbnScanner: IsbnScanner, isbnLookUpUseCase: IsbnLookUpUseCase)= ScanBookUseCase(
+       isbnScanner, isbnLookUpUseCase
+    )
+
+    @Singleton
+    @Provides
+    fun providesIsbnScanner(@ApplicationContext appContext: Context) = IsbnScannerImpl(
+        appContext
     )
 
     @Provides
@@ -102,6 +110,12 @@ abstract class ShelvdBindsModule{
     abstract fun bindBookRepo(
         defaultBookRepository: DefaultBookRepository
     ):BookRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindIsbnScanner(
+        isbnScannerImpl: IsbnScannerImpl
+    ):IsbnScanner
 
 }
 
