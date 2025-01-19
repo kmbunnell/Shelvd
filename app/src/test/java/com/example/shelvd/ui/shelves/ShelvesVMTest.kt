@@ -1,4 +1,4 @@
-package com.example.shelvd.ui
+package com.example.shelvd.ui.shelves
 
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.model.Shelf
