@@ -2,7 +2,7 @@ package com.shelvd.domain
 
 import com.shelvd.data.api.ApiSevice
 import com.shelvd.data.model.ApiResult
-import com.shelvd.data.model.bookData.BookData
+import com.shelvd.data.model.Book
 import com.shelvd.di.DefaultDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ class IsbnLookUpUseCase @Inject constructor(
     @DefaultDispatcher
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
-    suspend operator fun invoke(isbn: String): Flow<ApiResult<BookData>> =
+    suspend operator fun invoke(isbn: String): Flow<ApiResult<Book>> =
         withContext(dispatcher) {
            apiService.getBookByIsbn(isbn)
         }

@@ -4,7 +4,6 @@ package com.example.shelvd.ui
 import com.shelvd.data.repo.DefaultBookRepository
 import com.shelvd.ui.screens.BookList.BookIntent
 import com.shelvd.ui.screens.BookList.BookListViewState
-import com.shelvd.ui.MainViewModel
 import com.shelvd.ui.screens.BookList.BookListVM
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +20,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class BookListVmTest {
+class ShelvedBookListVmTest {
 
     private val repo = DefaultBookRepository()
     @OptIn(DelicateCoroutinesApi::class)
@@ -45,7 +44,7 @@ class BookListVmTest {
             vm.handleIntent(BookIntent.LoadBooks)
             assertEquals(vm.state.value, BookListViewState.BooksLoaded(repo.getBooks()))
             val loadedState = vm.state.value as BookListViewState.BooksLoaded
-            assertTrue(loadedState.books.isNotEmpty())
+            assertTrue(loadedState.shelvedBooks.isNotEmpty())
     }
 
     @Test
@@ -53,8 +52,8 @@ class BookListVmTest {
         val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.AddBook)
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
-        assertTrue(loadedState.books.isNotEmpty())
-        assertTrue(loadedState.books.size==5)
+        assertTrue(loadedState.shelvedBooks.isNotEmpty())
+        assertTrue(loadedState.shelvedBooks.size==5)
     }
 
     @Test
@@ -62,8 +61,8 @@ class BookListVmTest {
         val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.RemoveBook(2))
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
-        assertTrue(loadedState.books.isNotEmpty())
-        assertTrue(loadedState.books.size==3)
+        assertTrue(loadedState.shelvedBooks.isNotEmpty())
+        assertTrue(loadedState.shelvedBooks.size==3)
     }
 
     @Test
@@ -71,7 +70,7 @@ class BookListVmTest {
         val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.RemoveBook(-1))
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
-        assertTrue(loadedState.books.isNotEmpty())
-        assertTrue(loadedState.books.size==4)
+        assertTrue(loadedState.shelvedBooks.isNotEmpty())
+        assertTrue(loadedState.shelvedBooks.size==4)
     }
 }

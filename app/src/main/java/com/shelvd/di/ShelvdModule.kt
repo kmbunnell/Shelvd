@@ -3,7 +3,7 @@ package com.shelvd.di
 import android.content.Context
 import com.shelvd.data.api.ApiSevice
 import com.shelvd.data.api.OpenLibraryApiImpl
-import com.shelvd.data.model.Util
+import com.shelvd.data.Util
 import com.shelvd.data.repo.BookRepository
 import com.shelvd.data.repo.DefaultBookRepository
 import com.shelvd.domain.IsbnLookUpUseCase

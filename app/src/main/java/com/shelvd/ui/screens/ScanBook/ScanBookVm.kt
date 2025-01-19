@@ -30,7 +30,7 @@ class ScanBookVm @Inject constructor(val scanBookUseCase: ScanBookUseCase, val i
                 data -> _state.value = ScanBookViewState.ScannedBookSuccess("Got it")
 
             }*/
-            isbnLookupUseCase.invoke("9781496752901").collect{
+            isbnLookupUseCase.invoke("9780545522267").collect{
                 data->  _state.value = ScanBookViewState.ScannedBookSuccess("Got it")
             }
 

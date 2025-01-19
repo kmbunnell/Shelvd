@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.shelvd.data.model.Book
+import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.model.Shelf
 
 
@@ -36,7 +36,7 @@ fun ShelvesScreen(state:ShelvesViewState,  onAction: (ShelvesIntent) -> Unit) {
 
         when (state) {
             is ShelvesViewState.ShelvedBooks -> {
-                BookShelf(state.books)
+                BookShelf(state.shelvedBooks)
             }
 
             is ShelvesViewState.Error -> TODO()
@@ -52,11 +52,11 @@ fun Loading()
 }
 
 @Composable
-fun BookShelf(books:List<Book>)
+fun BookShelf(shelvedBooks:List<ShelvedBook>)
 {
     LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
-        items(books.size) { idx ->
-            Text(text = books[idx].title)
+        items(shelvedBooks.size) { idx ->
+            Text(text = shelvedBooks[idx].title)
         }
     }
 }

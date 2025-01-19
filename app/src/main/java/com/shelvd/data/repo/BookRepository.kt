@@ -1,39 +1,39 @@
 package com.shelvd.data.repo
 
-import com.shelvd.data.model.Book
+import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.model.Shelf
 import javax.inject.Inject
 
 
 interface BookRepository {
-     fun getBooks(): List<Book>
+     fun getBooks(): List<ShelvedBook>
      fun addBook()
      fun removeBook(idx:Int)
 }
 
 class DefaultBookRepository @Inject constructor(): BookRepository {
-    private val bookList: MutableList<Book> = mutableListOf()
+    private val shelvedBookList: MutableList<ShelvedBook> = mutableListOf()
 
-    override fun getBooks(): List<Book> {
-      if(bookList.size == 0)
+    override fun getBooks(): List<ShelvedBook> {
+      if(shelvedBookList.size == 0)
       {
-          bookList.add(Book("Sarah J Maas", "A Court of Silver Flames", Shelf.OWNED))
-          bookList.add(Book("Jay Kristoff", "Empire of the Vampire", Shelf.OWNED))
-          bookList.add(Book("Brigid Kemmerer", "Defy the Night", Shelf.OWNED))
-          bookList.add(Book("Brandon Sanderson", "Mistborn: The final Empire", Shelf.OWNED))
-          bookList.add(Book("Brigid Kemmerer", "Carving Shadows Into Gold", Shelf.PREORDERED))
-          bookList.add(Book("Brynne Weaver", "Scythe and Sparrow", Shelf.PREORDERED))
-          bookList.add(Book("Jennifer Armentrout", "A Soul of Blood and Ash", Shelf.WANT))
+          shelvedBookList.add(ShelvedBook("Sarah J Maas", "A Court of Silver Flames", Shelf.OWNED))
+          shelvedBookList.add(ShelvedBook("Jay Kristoff", "Empire of the Vampire", Shelf.OWNED))
+          shelvedBookList.add(ShelvedBook("Brigid Kemmerer", "Defy the Night", Shelf.OWNED))
+          shelvedBookList.add(ShelvedBook("Brandon Sanderson", "Mistborn: The final Empire", Shelf.OWNED))
+          shelvedBookList.add(ShelvedBook("Brigid Kemmerer", "Carving Shadows Into Gold", Shelf.PREORDERED))
+          shelvedBookList.add(ShelvedBook("Brynne Weaver", "Scythe and Sparrow", Shelf.PREORDERED))
+          shelvedBookList.add(ShelvedBook("Jennifer Armentrout", "A Soul of Blood and Ash", Shelf.WANT))
       }
-        return bookList.toList()
+        return shelvedBookList.toList()
     }
 
     override fun addBook() {
-       bookList.add(Book("VE Schwab", "A Darker Shade of Magic"))
+       shelvedBookList.add(ShelvedBook("VE Schwab", "A Darker Shade of Magic"))
     }
 
     override fun removeBook(idx: Int) {
-       bookList.removeAt(idx)
+       shelvedBookList.removeAt(idx)
     }
 
 }
