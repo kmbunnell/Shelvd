@@ -2,7 +2,6 @@ package com.shelvd.data.api
 
 import com.shelvd.data.model.ApiResult
 import com.shelvd.data.Util
-import com.shelvd.data.model.FoundBook
 import com.shelvd.data.model.BookResult
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

@@ -13,8 +13,6 @@ data class BookResult(
 data class Doc(
     @JsonNames("author_name")
     val authorName: List<String>,
-    @JsonNames("cover_edition_key")
-    val coverEditionKey: String,
     val title: String,
 )
 

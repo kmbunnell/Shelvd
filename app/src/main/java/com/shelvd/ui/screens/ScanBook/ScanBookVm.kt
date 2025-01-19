@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shelvd.data.model.ApiResult
 import com.shelvd.data.model.BookResult
+import com.shelvd.data.model.IsbnScanner
 import com.shelvd.domain.IsbnLookUpUseCase
 import com.shelvd.domain.ScanBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScanBookVm @Inject constructor(val scanBookUseCase: ScanBookUseCase, val isbnLookupUseCase:IsbnLookUpUseCase): ViewModel() {
+class ScanBookVm @Inject constructor( val scanBookUseCase: ScanBookUseCase): ViewModel() {
 
     private val _state = MutableStateFlow<ScanBookViewState>(ScanBookViewState.AwaitScan)
     val state: StateFlow<ScanBookViewState> = _state
@@ -28,13 +29,14 @@ class ScanBookVm @Inject constructor(val scanBookUseCase: ScanBookUseCase, val i
 
     private fun scan() {
         viewModelScope.launch {
-           /* scanBookUseCase.invoke().collect{
-                data -> _state.value = ScanBookViewState.ScannedBookSuccess("Got it")
+            scanBookUseCase.invoke().collect{
+                result -> updateUIState(result)
 
-            }*/
-            isbnLookupUseCase.invoke("9780545522267").collect{
-              result -> updateUIState(result)
             }
+
+           /* isbnLookupUseCase.invoke("9780545522267").collect{
+              result -> updateUIState(result)
+            }*/
         }
     }
     private fun updateUIState(result: ApiResult<BookResult>)
