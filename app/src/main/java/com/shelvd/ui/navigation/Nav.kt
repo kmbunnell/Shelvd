@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.shelvd.ui.screens.ScanBook.ScannBookRoute
+import com.shelvd.ui.screens.scanBook.ScannBookRoute
 import com.shelvd.ui.screens.shelves.ShelvesRoute
 
 

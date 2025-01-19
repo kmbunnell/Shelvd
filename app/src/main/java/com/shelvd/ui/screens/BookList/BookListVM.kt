@@ -1,4 +1,4 @@
-package com.shelvd.ui.screens.BookList
+package com.shelvd.ui.screens.bookList
 
 import androidx.lifecycle.ViewModel
 import com.shelvd.data.repo.BookRepository
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class BookListVM  @Inject constructor(private val repository: BookRepository): ViewModel()  {
+class BookListVM @Inject constructor(private val repository: BookRepository): ViewModel()  {
     private val _state = MutableStateFlow<BookListViewState>(BookListViewState.Loading)
     val state: StateFlow<BookListViewState> = _state
 

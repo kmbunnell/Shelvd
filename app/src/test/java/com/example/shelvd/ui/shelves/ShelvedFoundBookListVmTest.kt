@@ -1,14 +1,13 @@
-package com.example.shelvd.ui
+package com.example.shelvd.ui.shelves
 
 
 import com.shelvd.data.repo.DefaultBookRepository
-import com.shelvd.ui.screens.BookList.BookIntent
-import com.shelvd.ui.screens.BookList.BookListViewState
-import com.shelvd.ui.screens.BookList.BookListVM
-import kotlinx.coroutines.DelicateCoroutinesApi
+import com.shelvd.ui.screens.bookList.BookIntent
+import com.shelvd.ui.screens.bookList.BookListViewState
+import com.shelvd.ui.screens.bookList.BookListVM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -19,27 +18,27 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+
+
 @OptIn(ExperimentalCoroutinesApi::class)
-class ShelvedBookListVmTest {
+class ShelvedFoundBookListVmTest {
 
     private val repo = DefaultBookRepository()
-    @OptIn(DelicateCoroutinesApi::class)
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
-
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
     @Before
     fun setUp() {
 
-        Dispatchers.setMain(mainThreadSurrogate)
+        Dispatchers.setMain(testDispatcher)
     }
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain() // reset the main dispatcher to the original Main dispatcher
-        mainThreadSurrogate.close()
+        Dispatchers.resetMain()
+
     }
 
     @Test
-    fun `load books`() = runTest(UnconfinedTestDispatcher()) {
+    fun `load books`() = runTest(testDispatcher) {
           val vm = BookListVM(repo)
             vm.handleIntent(BookIntent.LoadBooks)
             assertEquals(vm.state.value, BookListViewState.BooksLoaded(repo.getBooks()))
@@ -48,29 +47,29 @@ class ShelvedBookListVmTest {
     }
 
     @Test
-    fun `add book`() = runTest(UnconfinedTestDispatcher()) {
+    fun `add book`() = runTest(testDispatcher) {
         val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.AddBook)
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
         assertTrue(loadedState.shelvedBooks.isNotEmpty())
-        assertTrue(loadedState.shelvedBooks.size==5)
+        assertTrue(loadedState.shelvedBooks.size==8)
     }
 
     @Test
-    fun `remove book`() = runTest(UnconfinedTestDispatcher()) {
+    fun `remove book`() = runTest(testDispatcher) {
         val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.RemoveBook(2))
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
         assertTrue(loadedState.shelvedBooks.isNotEmpty())
-        assertTrue(loadedState.shelvedBooks.size==3)
+        assertTrue(loadedState.shelvedBooks.size==6)
     }
 
     @Test
-    fun `remove book no change when idx -1`() = runTest(UnconfinedTestDispatcher()) {
+    fun `remove book no change when idx -1`() = runTest(testDispatcher) {
         val vm = BookListVM(repo)
         vm.handleIntent(BookIntent.RemoveBook(-1))
         val loadedState = vm.state.value as BookListViewState.BooksLoaded
         assertTrue(loadedState.shelvedBooks.isNotEmpty())
-        assertTrue(loadedState.shelvedBooks.size==4)
+        assertTrue(loadedState.shelvedBooks.size==7)
     }
 }

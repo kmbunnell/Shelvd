@@ -1,7 +1,9 @@
-package com.shelvd.ui.screens.ScanBook
+package com.shelvd.ui.screens.scanBook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shelvd.data.model.ApiResult
+import com.shelvd.data.model.BookResult
 import com.shelvd.domain.IsbnLookUpUseCase
 import com.shelvd.domain.ScanBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,15 +28,21 @@ class ScanBookVm @Inject constructor(val scanBookUseCase: ScanBookUseCase, val i
 
     private fun scan() {
         viewModelScope.launch {
-            /*scanBookUseCase.invoke().collect{
+           /* scanBookUseCase.invoke().collect{
                 data -> _state.value = ScanBookViewState.ScannedBookSuccess("Got it")
 
             }*/
             isbnLookupUseCase.invoke("9780545522267").collect{
-                data->  _state.value = ScanBookViewState.ScannedBookSuccess("Got it")
+              result -> updateUIState(result)
             }
-
         }
-
     }
+    private fun updateUIState(result: ApiResult<BookResult>)
+    {
+        if(result.data!=null)
+            _state.value = ScanBookViewState.BookScanSuccess(result.data)
+        else
+            _state.value = ScanBookViewState.BookScanError("Isbn look up failed")
+    }
+
 }

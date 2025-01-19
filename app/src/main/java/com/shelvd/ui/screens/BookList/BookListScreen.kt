@@ -1,6 +1,4 @@
-package com.shelvd.ui.screens.BookList
-
-
+package com.shelvd.ui.screens.bookList
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -18,10 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-
 @Composable
 fun BookListScreen(modifier: Modifier = Modifier) {
-     Text(modifier = Modifier.padding(top = 50.dp), text = "Books")
+    Text(modifier = Modifier.padding(top = 50.dp), text = "Books")
     /*val viewModel: MainViewModel = viewModel()
     val currentState by viewModel.state.collectAsStateWithLifecycle()
     BookListContent(currentState, viewModel::handleIntent)*/
