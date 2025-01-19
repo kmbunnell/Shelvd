@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.shelvd.data.model.Book
+import com.shelvd.data.model.BookResult
 
 @Composable
 fun ScannBookRoute( viewModel: ScanBookVm = hiltViewModel() )
@@ -52,7 +52,7 @@ fun ScanBookScreen( state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit
 }
 
 @Composable
-fun BookFound(book: Book)
+fun BookFound(book: BookResult)
 {
     Column {
         Text(text= book.docs[0].title)

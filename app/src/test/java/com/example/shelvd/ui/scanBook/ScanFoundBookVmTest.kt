@@ -9,7 +9,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 
-class ScanBookVmTest {
+class ScanFoundBookVmTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 

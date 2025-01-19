@@ -1,9 +1,9 @@
 package com.shelvd.di
 
 import android.content.Context
-import com.shelvd.data.api.ApiSevice
 import com.shelvd.data.api.OpenLibraryApiImpl
 import com.shelvd.data.Util
+import com.shelvd.data.api.ApiService
 import com.shelvd.data.repo.BookRepository
 import com.shelvd.data.repo.DefaultBookRepository
 import com.shelvd.domain.IsbnLookUpUseCase
@@ -59,10 +59,12 @@ object ShelvdModule {
     fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Provides
-    fun providesScanBookUseCase(@ApplicationContext appContext: Context)= ScanBookUseCase(appContext)
+    fun providesScanBookUseCase(@ApplicationContext appContext: Context)= ScanBookUseCase(
+        appContext,
+    )
 
     @Provides
-    fun providesIsbnLookUpUseCase(apiService: ApiSevice)= IsbnLookUpUseCase(apiService)
+    fun providesIsbnLookUpUseCase(apiService: ApiService)= IsbnLookUpUseCase(apiService)
 
     @Singleton
     @Provides
@@ -88,7 +90,7 @@ object ShelvdModule {
 
     @Singleton
     @Provides
-    fun provideApiService(httpClient: HttpClient):ApiSevice=OpenLibraryApiImpl(httpClient)
+    fun provideApiService(httpClient: HttpClient): ApiService = OpenLibraryApiImpl(httpClient)
 }
 
 

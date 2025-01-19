@@ -23,6 +23,7 @@ class ScanBookUseCase(
             scanner.startScan().addOnSuccessListener { barcode ->
                 launch {
                    send(barcode.rawValue)
+
                 }
             }
                 .addOnFailureListener{
@@ -32,8 +33,6 @@ class ScanBookUseCase(
             awaitClose { }
         }
     }
-
-
 }
 
 

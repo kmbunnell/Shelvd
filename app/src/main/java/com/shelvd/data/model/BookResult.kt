@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
 
 @Serializable
-data class Book(
+data class BookResult(
     val docs: List<Doc>
 )
 

@@ -21,7 +21,7 @@ import org.junit.Test
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ShelvedBookListVmTest {
+class ShelvedFoundBookListVmTest {
 
     private val repo = DefaultBookRepository()
     private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
