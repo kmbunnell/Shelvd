@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScanBookVm @Inject constructor( val scanBookUseCase: ScanBookUseCase): ViewModel() {
+class ScanBookVm @Inject constructor(private val scanBookUseCase: ScanBookUseCase,
+                                     private val isbnLookUpUseCase: IsbnLookUpUseCase): ViewModel() {
 
     private val _state = MutableStateFlow<ScanBookViewState>(ScanBookViewState.AwaitScan)
     val state: StateFlow<ScanBookViewState> = _state
@@ -23,6 +24,10 @@ class ScanBookVm @Inject constructor( val scanBookUseCase: ScanBookUseCase): Vie
         when (intent) {
             is ScanBookIntent.StartScan -> {
                 scan()
+            }
+
+            is ScanBookIntent.LookUp->{
+                lookUp(intent.isbn)
             }
         }
     }
@@ -33,12 +38,17 @@ class ScanBookVm @Inject constructor( val scanBookUseCase: ScanBookUseCase): Vie
                 result -> updateUIState(result)
 
             }
-
-           /* isbnLookupUseCase.invoke("9780545522267").collect{
-              result -> updateUIState(result)
-            }*/
         }
     }
+
+    private fun lookUp(isbn: String){
+        viewModelScope.launch {
+            isbnLookUpUseCase.invoke(isbn).collect{
+                result -> updateUIState(result)
+            }
+        }
+    }
+
     private fun updateUIState(result: ApiResult<BookResult>)
     {
         if(result.data!=null)

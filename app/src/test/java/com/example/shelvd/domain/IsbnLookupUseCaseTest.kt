@@ -5,6 +5,7 @@ import com.shelvd.data.model.ApiResult
 import com.shelvd.data.model.BookResult
 import com.shelvd.data.model.Doc
 import com.shelvd.domain.IsbnLookUpUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -14,6 +15,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 
 class IsbnLookupUseCaseTest {
+    @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = UnconfinedTestDispatcher()
 
     @Test
