@@ -29,6 +29,9 @@ class ScanBookVm @Inject constructor(private val scanBookUseCase: ScanBookUseCas
             is ScanBookIntent.LookUp->{
                 lookUp(intent.isbn)
             }
+            is ScanBookIntent.ShelveBook->{
+                val shelf = intent.shelf
+            }
         }
     }
 

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
@@ -47,7 +49,7 @@ class MainActivity : ComponentActivity() {
                                 IconButton(onClick = { navController.navigate(BottomNavRoutes.Scan.route) })
                                 {
                                     Icon(
-                                        imageVector = Icons.Filled.Create,
+                                        imageVector = Icons.Filled.AddCircle,
                                         contentDescription = stringResource(R.string.add_book)
                                     )
                                 }

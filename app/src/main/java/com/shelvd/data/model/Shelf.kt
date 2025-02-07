@@ -1,8 +1,8 @@
 package com.shelvd.data.model
 
-enum class Shelf{
-    OWNED,
-    PREORDERED,
-    WANT,
-    MISC
+enum class Shelf(val shelfName:String){
+    OWNED("Owned"),
+    PREORDERED("Preordered"),
+    WANT("Want"),
+    CHECK("Check")
 }

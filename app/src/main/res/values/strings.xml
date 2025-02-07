@@ -4,4 +4,11 @@
     <string name="create_shelf">Create Shelf</string>
     <string name="home">Home</string>
     <string name="add_book">Add Book</string>
+    <string name="find">Find</string>
+    <string name="scan">Scan</string>
+    <string name="isbn">ISBN</string>
+    <string name="shelve">Shelve</string>
+    <string name="shelveOn">Shelve On: %1$s </string>
+
+
 </resources>
