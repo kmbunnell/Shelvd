@@ -24,8 +24,8 @@ class ShelvesVMTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = UnconfinedTestDispatcher()
     val testOwnedShelvedBooks= listOf(
-        ShelvedBook("Kristina Bunnell", "Most Amazing Book Ever", Shelf.OWNED),
-        ShelvedBook("K Bear", "Hot Vampires", Shelf.OWNED)
+        ShelvedBook(listOf("Kristina Bunnell"), "Most Amazing Book Ever", "isbn", Shelf.OWNED),
+        ShelvedBook(listOf("K Bear"), "Hot Vampires","isbn", Shelf.OWNED)
     )
 
     @OptIn(ExperimentalCoroutinesApi::class)

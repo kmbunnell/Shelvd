@@ -1,9 +1,9 @@
 package com.example.shelvd.domain
 
-import com.shelvd.data.api.ApiService
-import com.shelvd.data.model.ApiResult
-import com.shelvd.data.model.BookResult
-import com.shelvd.data.model.Doc
+
+import com.shelvd.data.model.Shelf
+import com.shelvd.data.model.ShelvedBook
+import com.shelvd.data.repo.BookRepository
 import com.shelvd.domain.IsbnLookUpUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -17,28 +17,18 @@ import org.mockito.kotlin.mock
 class IsbnLookupUseCaseTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = UnconfinedTestDispatcher()
+    val bookRepository = mock<BookRepository>(){
+        on{lookUpBookByISBN("isbn")}.thenReturn(flow{
+            emit(ShelvedBook( listOf("Sarah J Maas"),
+                "A Court of Thorns and Roses", isbn ="isbn", Shelf.WANT))
+        })
+    }
 
     @Test
     fun `book lookup success`() = runTest(testDispatcher) {
-        val mockApi = mock<ApiService> {
-            on { getBookByIsbn("isbn") }.thenReturn(flow {
-                emit(
-                    ApiResult.Success(
-                        BookResult(
-                            listOf(
-                                Doc(
-                                    listOf("Sarah J Maas"),
-                                    "A Court of Thorns and Roses"
-                                )
-                            )
-                        )
-                    )
-                )
-            })
-        }
-        val usecase = IsbnLookUpUseCase(mockApi, testDispatcher)
+        val usecase = IsbnLookUpUseCase(bookRepository, testDispatcher)
         val item = usecase.invoke("isbn").first()
-        assertEquals(item.data?.docs?.first()?.title, "A Court of Thorns and Roses")
+        assertEquals(item?.title, "A Court of Thorns and Roses")
     }
 
 }

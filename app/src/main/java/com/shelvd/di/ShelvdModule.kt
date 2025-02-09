@@ -72,7 +72,7 @@ object ShelvdModule {
     )
 
     @Provides
-    fun providesIsbnLookUpUseCase(apiService: ApiService)= IsbnLookUpUseCase(apiService)
+    fun providesIsbnLookUpUseCase(bookRepository: BookRepository)= IsbnLookUpUseCase(bookRepository)
 
     @Singleton
     @Provides

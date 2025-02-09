@@ -3,6 +3,7 @@ package com.shelvd.domain
 import com.shelvd.data.model.ApiResult
 import com.shelvd.data.model.BookResult
 import com.shelvd.data.model.IsbnScanner
+import com.shelvd.data.model.ShelvedBook
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -13,7 +14,7 @@ class ScanBookUseCase(
     val isbnLookUpUseCase: IsbnLookUpUseCase,
 ) {
 
-    operator fun invoke(): Flow<ApiResult<BookResult>> {
+    operator fun invoke(): Flow<ShelvedBook?> {
         return callbackFlow {
             isbnScanner.scanner.startScan()
                 .addOnSuccessListener { barcode ->
