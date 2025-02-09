@@ -38,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.shelvd.R
 import com.shelvd.data.model.BookResult
 import com.shelvd.data.model.Shelf
+import com.shelvd.data.model.ShelvedBook
 
 
 @Composable
@@ -145,11 +146,11 @@ fun IsbnLookUpRow(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> U
 }
 
 @Composable
-fun BookFound(book: BookResult, onAction: (ScanBookIntent) -> Unit) {
+fun BookFound(book: ShelvedBook, onAction: (ScanBookIntent) -> Unit) {
     var selectedShelf by remember { mutableStateOf(Shelf.WANT) }
     Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-        Text(text = book.docs[0].title)
-        Text(text = book.docs[0].authorName[0])
+        Text(text = book.title)
+        Text(text = book.authors[0])
         Row( verticalAlignment = Alignment.CenterVertically) {
             Text(
                 modifier = Modifier.padding(end = 10.dp),

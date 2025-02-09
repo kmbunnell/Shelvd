@@ -16,6 +16,6 @@ class LoadBooksForShelfUseCase @Inject constructor(
 
     suspend operator fun invoke(shelf: Shelf): List<ShelvedBook> =
         withContext(defaultDispatcher) {
-            bookRepository.getBooks().filter { it.shelf == shelf }
+            bookRepository.getShelvedBooks().filter { it.shelf == shelf }
         }
 }

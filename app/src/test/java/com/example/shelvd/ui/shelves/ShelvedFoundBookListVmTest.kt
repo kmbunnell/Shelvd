@@ -1,6 +1,7 @@
 package com.example.shelvd.ui.shelves
 
 
+import com.shelvd.data.api.ApiService
 import com.shelvd.data.repo.DefaultBookRepository
 import com.shelvd.ui.screens.bookList.BookIntent
 import com.shelvd.ui.screens.bookList.BookListViewState
@@ -17,13 +18,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-
+import org.mockito.Mockito.mock
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ShelvedFoundBookListVmTest {
 
-    private val repo = DefaultBookRepository()
+    private val mockApi = mock<ApiService>()
+    private val repo = DefaultBookRepository(mockApi)
     private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
     @Before
     fun setUp() {
@@ -41,7 +43,7 @@ class ShelvedFoundBookListVmTest {
     fun `load books`() = runTest(testDispatcher) {
           val vm = BookListVM(repo)
             vm.handleIntent(BookIntent.LoadBooks)
-            assertEquals(vm.state.value, BookListViewState.BooksLoaded(repo.getBooks()))
+            assertEquals(vm.state.value, BookListViewState.BooksLoaded(repo.getShelvedBooks()))
             val loadedState = vm.state.value as BookListViewState.BooksLoaded
             assertTrue(loadedState.shelvedBooks.isNotEmpty())
     }

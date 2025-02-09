@@ -27,7 +27,7 @@ class BookListVM @Inject constructor(private val repository: BookRepository): Vi
     private fun getBookList() {
         _state.value = BookListViewState.Loading
         _state.value = try {
-            val books = repository.getBooks()
+            val books = repository.getShelvedBooks()
             BookListViewState.BooksLoaded(books)
         } catch (e: Exception) {
             BookListViewState.Error("Wrong")
@@ -35,13 +35,13 @@ class BookListVM @Inject constructor(private val repository: BookRepository): Vi
     }
 
     private fun addBook() {
-        repository.addBook()
+        repository.addBookToShelf()
         getBookList()
     }
 
     private fun removeBook(idx: Int) {
         if (idx != -1) {
-            repository.removeBook(idx)
+            repository.removeBookFromShelf(idx)
             getBookList()
         }
     }
