@@ -8,7 +8,7 @@
     <string name="scan">Scan</string>
     <string name="isbn">ISBN</string>
     <string name="shelve">Shelve</string>
-    <string name="shelveOn">Shelve On: %1$s </string>
+    <string name="shelveOn">Shelve On: </string>
 
 
 </resources>

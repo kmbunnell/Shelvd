@@ -1,16 +1,16 @@
 package com.shelvd.ui.screens.scanBook
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -30,11 +30,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierInfo
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -149,40 +146,40 @@ fun IsbnLookUpRow(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> U
 
 @Composable
 fun BookFound(book: BookResult, onAction: (ScanBookIntent) -> Unit) {
-    var selectedShelf by remember { mutableStateOf(Shelf.CHECK) }
-    Column(modifier = Modifier.padding(vertical = 10.dp, horizontal = 16.dp)) {
+    var selectedShelf by remember { mutableStateOf(Shelf.WANT) }
+    Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
         Text(text = book.docs[0].title)
         Text(text = book.docs[0].authorName[0])
+        Row( verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                modifier = Modifier.padding(end = 10.dp),
+                text = stringResource(R.string.shelveOn)
+            )
+            ShelfSelectDropDown(selectedShelf, onShelfSelection = { selectedShelf = it })
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            ShelfSelectDropDown(shelf = selectedShelf, onShelfSelection = { selectedShelf = it })
+        }
+        Row(modifier = Modifier.align(Alignment.End)) {
             Button(
                 onClick = {
                     onAction(ScanBookIntent.ShelveBook(selectedShelf))
                 },
-                modifier = Modifier.padding(vertical = 30.dp)
             ) {
-                Text(text= stringResource(R.string.shelve))
+                Text(text = stringResource(R.string.shelve))
             }
         }
     }
 }
 
 @Composable
-fun ShelfSelectDropDown(shelf: Shelf, onShelfSelection: (Shelf) -> Unit) {
+fun ShelfSelectDropDown(selectedShelf:Shelf, onShelfSelection: (Shelf) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-    Row(
-        modifier = Modifier
-            .padding(16.dp)
-    ) {
         Text(
-            modifier = Modifier.align(Alignment.CenterVertically),
-            textAlign = TextAlign.Center,
-            text = stringResource(R.string.shelveOn, shelf.shelfName)
+            text = selectedShelf.shelfName
         )
-        IconButton(onClick = { expanded = !expanded }) {
-            Icon(Icons.Rounded.ArrowDropDown, contentDescription = "Shelves")
+        IconButton(
+            onClick = { expanded = !expanded }) {
+            Icon(Icons.Filled.ArrowDropDown, contentDescription = "Shelves")
         }
 
         DropdownMenu(
@@ -201,7 +198,6 @@ fun ShelfSelectDropDown(shelf: Shelf, onShelfSelection: (Shelf) -> Unit) {
                 )
             }
         }
-    }
 }
 
 @Composable
