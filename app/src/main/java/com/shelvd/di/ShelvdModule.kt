@@ -106,6 +106,7 @@ object ShelvdModule {
 @InstallIn(SingletonComponent::class)
 abstract class ShelvdBindsModule{
 
+    @Singleton
     @Binds
     abstract fun bindBookRepo(
         defaultBookRepository: DefaultBookRepository

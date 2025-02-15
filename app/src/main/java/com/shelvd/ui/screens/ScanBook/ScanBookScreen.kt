@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.shelvd.R
-import com.shelvd.data.model.BookResult
 import com.shelvd.data.model.Shelf
 import com.shelvd.data.model.ShelvedBook
 
@@ -147,7 +146,7 @@ fun IsbnLookUpRow(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> U
 
 @Composable
 fun BookFound(book: ShelvedBook, onAction: (ScanBookIntent) -> Unit) {
-    var selectedShelf by remember { mutableStateOf(Shelf.WANT) }
+    var selectedShelf by remember { mutableStateOf(book.shelf) }
     Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
         Text(text = book.title)
         Text(text = book.authors[0])
@@ -162,7 +161,7 @@ fun BookFound(book: ShelvedBook, onAction: (ScanBookIntent) -> Unit) {
         Row(modifier = Modifier.align(Alignment.End)) {
             Button(
                 onClick = {
-                    onAction(ScanBookIntent.ShelveBook(selectedShelf))
+                    onAction(ScanBookIntent.ShelveBook(book, selectedShelf))
                 },
             ) {
                 Text(text = stringResource(R.string.shelve))

@@ -1,6 +1,8 @@
 package com.shelvd.ui.screens.bookList
 
 import androidx.lifecycle.ViewModel
+import com.shelvd.data.model.Shelf
+import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.repo.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +37,7 @@ class BookListVM @Inject constructor(private val repository: BookRepository): Vi
     }
 
     private fun addBook() {
-        repository.addBookToShelf()
+        repository.addBookToShelf(ShelvedBook(listOf("VE Schwab"), ("A darker shade of magic"), "isbn", Shelf.OWNED) )
         getBookList()
     }
 

@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 interface BookRepository {
      fun getShelvedBooks(): List<ShelvedBook>
-     fun addBookToShelf()
+     fun addBookToShelf(newBook: ShelvedBook)
      fun removeBookFromShelf(idx:Int)
      fun lookUpBookByISBN(isbn:String):Flow<ShelvedBook?>
 }
@@ -32,8 +32,8 @@ class DefaultBookRepository @Inject constructor(val apiService: ApiService): Boo
         return shelvedBookList.toList()
     }
 
-    override fun addBookToShelf() {
-       shelvedBookList.add(ShelvedBook(listOf("VE Schwab"), "A Darker Shade of Magic"))
+    override fun addBookToShelf(newBook:ShelvedBook) {
+       shelvedBookList.add(newBook)
     }
 
     override fun removeBookFromShelf(idx: Int) {
@@ -45,7 +45,5 @@ class DefaultBookRepository @Inject constructor(val apiService: ApiService): Boo
           return@map ShelvedBook(authors = book.docs[0].authorName, title= book.docs[0].title, isbn = isbn)
         }
     }
-
-
 
 }
