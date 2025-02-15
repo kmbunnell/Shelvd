@@ -23,9 +23,9 @@ class ShelvesVMTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = UnconfinedTestDispatcher()
-    val testOwnedShelvedBooks= listOf(
+    val testOwnedShelvedBooks = listOf(
         ShelvedBook(listOf("Kristina Bunnell"), "Most Amazing Book Ever", "isbn", Shelf.OWNED),
-        ShelvedBook(listOf("K Bear"), "Hot Vampires","isbn", Shelf.OWNED)
+        ShelvedBook(listOf("K Bear"), "Hot Vampires", "isbn", Shelf.OWNED)
     )
     val bookrepo = mock<BookRepository>()
 
@@ -47,7 +47,10 @@ class ShelvesVMTest {
     fun `load owned books`() = runTest(testDispatcher) {
         whenever(bookrepo.getShelvedBooksByShelf(Shelf.OWNED)).thenReturn(testOwnedShelvedBooks)
         val vm = ShelvesVM(bookrepo)
-        assertEquals(vm.state.value, ShelvesViewState.ShelvedBooks(shelvedBooks = testOwnedShelvedBooks))
+        assertEquals(
+            vm.state.value,
+            ShelvesViewState.ShelvedBooks(shelvedBooks = testOwnedShelvedBooks)
+        )
 
     }
 }

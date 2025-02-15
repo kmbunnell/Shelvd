@@ -28,15 +28,15 @@ class ScanFoundBookVmTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-    val shelvedBook =  ShelvedBook(listOf("K Bear"), "Best book", isbn ="12345")
-    private val mockScanBookUseCase = mock<ScanBookUseCase>(){
-        on{invoke()}.thenReturn( (flow {
+    val shelvedBook = ShelvedBook(listOf("K Bear"), "Best book", isbn = "12345")
+    private val mockScanBookUseCase = mock<ScanBookUseCase>() {
+        on { invoke() }.thenReturn((flow {
             emit(shelvedBook)
         }))
     }
 
     private val mockIsbnLookUpUseCase = mock<IsbnLookUpUseCase>() {
-        on { invoke("12345") }.thenReturn( flow {
+        on { invoke("12345") }.thenReturn(flow {
             emit(shelvedBook)
         })
     }
@@ -60,14 +60,22 @@ class ScanFoundBookVmTest {
 
     @Test
     fun `when scan successful, UI state is BookScanSuccess`() = runTest(testDispatcher) {
-        val vm = ScanBookVm (scanBookUseCase = mockScanBookUseCase, isbnLookUpUseCase = mockIsbnLookUpUseCase, bookRepository = mockBookRepo)
+        val vm = ScanBookVm(
+            scanBookUseCase = mockScanBookUseCase,
+            isbnLookUpUseCase = mockIsbnLookUpUseCase,
+            bookRepository = mockBookRepo
+        )
         vm.handleIntent(ScanBookIntent.StartScan)
         assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook))
     }
 
     @Test
     fun `when isbn look up successful, UI state is BookScanSuccess`() = runTest(testDispatcher) {
-        val vm = ScanBookVm (scanBookUseCase = mockScanBookUseCase, isbnLookUpUseCase = mockIsbnLookUpUseCase, bookRepository = mockBookRepo)
+        val vm = ScanBookVm(
+            scanBookUseCase = mockScanBookUseCase,
+            isbnLookUpUseCase = mockIsbnLookUpUseCase,
+            bookRepository = mockBookRepo
+        )
         vm.handleIntent(ScanBookIntent.LookUp("12345"))
         assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook))
     }

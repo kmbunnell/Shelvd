@@ -13,14 +13,16 @@ import javax.inject.Inject
 
 
 interface BookRepository {
-     suspend fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook>
-     suspend fun addBookToShelf(newBook: ShelvedBook)
-     fun removeBookFromShelf(idx:Int)
-     fun lookUpBookByISBN(isbn:String):Flow<ShelvedBook?>
+    suspend fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook>
+    suspend fun addBookToShelf(newBook: ShelvedBook)
+    fun removeBookFromShelf(idx: Int)
+    fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?>
 }
 
-class DefaultBookRepository @Inject constructor(val apiService: ApiService,
-                                                @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default): BookRepository {
+class DefaultBookRepository @Inject constructor(
+    val apiService: ApiService,
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
+) : BookRepository {
     private val shelvedBookList: MutableList<ShelvedBook> = mutableListOf()
 
     private fun loadShelvedBooks(): List<ShelvedBook> {

@@ -11,13 +11,13 @@ import com.shelvd.ui.screens.shelves.ShelvesRoute
 
 enum class BottomNavRoutes(val route: String) {
     Home("home"),
-    Scan ("scan")
+    Scan("scan")
 }
 
 @Composable
-fun BottomNav(navController: NavHostController){
+fun BottomNav(navController: NavHostController) {
 
-    NavHost(navController=navController, startDestination = BottomNavRoutes.Home.route ){
+    NavHost(navController = navController, startDestination = BottomNavRoutes.Home.route) {
         composable(BottomNavRoutes.Home.route) { ShelvesRoute() }
         composable(BottomNavRoutes.Scan.route) { ScanBookRoute() }
     }

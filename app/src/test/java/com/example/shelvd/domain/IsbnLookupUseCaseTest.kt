@@ -17,10 +17,14 @@ import org.mockito.kotlin.mock
 class IsbnLookupUseCaseTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = UnconfinedTestDispatcher()
-    val bookRepository = mock<BookRepository>(){
-        on{lookUpBookByISBN("isbn")}.thenReturn(flow{
-            emit(ShelvedBook( listOf("Sarah J Maas"),
-                "A Court of Thorns and Roses", isbn ="isbn", Shelf.WANT))
+    val bookRepository = mock<BookRepository>() {
+        on { lookUpBookByISBN("isbn") }.thenReturn(flow {
+            emit(
+                ShelvedBook(
+                    listOf("Sarah J Maas"),
+                    "A Court of Thorns and Roses", isbn = "isbn", Shelf.WANT
+                )
+            )
         })
     }
 

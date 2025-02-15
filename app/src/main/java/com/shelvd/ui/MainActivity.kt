@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.BottomAppBar
@@ -57,7 +55,10 @@ class MainActivity : ComponentActivity() {
                             })
                     }
                 ) { innerPadding ->
-                    Column(Modifier.padding(innerPadding).fillMaxSize())
+                    Column(
+                        Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize())
                     {
                         BottomNav(navController)
                     }

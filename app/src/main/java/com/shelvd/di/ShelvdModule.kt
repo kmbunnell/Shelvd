@@ -50,7 +50,7 @@ annotation class MainDispatcher
 object ShelvdModule {
     @Provides
     @DefaultDispatcher
-    fun provideDefaultDispatcher() : CoroutineDispatcher = Dispatchers.Default
+    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
     @Provides
     @IoDispatcher
@@ -61,9 +61,10 @@ object ShelvdModule {
     fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Provides
-    fun providesScanBookUseCase(isbnScanner: IsbnScanner, isbnLookUpUseCase: IsbnLookUpUseCase)= ScanBookUseCase(
-       isbnScanner, isbnLookUpUseCase
-    )
+    fun providesScanBookUseCase(isbnScanner: IsbnScanner, isbnLookUpUseCase: IsbnLookUpUseCase) =
+        ScanBookUseCase(
+            isbnScanner, isbnLookUpUseCase
+        )
 
     @Singleton
     @Provides
@@ -72,22 +73,23 @@ object ShelvdModule {
     )
 
     @Provides
-    fun providesIsbnLookUpUseCase(bookRepository: BookRepository)= IsbnLookUpUseCase(bookRepository)
+    fun providesIsbnLookUpUseCase(bookRepository: BookRepository) =
+        IsbnLookUpUseCase(bookRepository)
 
     @Singleton
     @Provides
     fun provideHttpClient(): HttpClient {
         return HttpClient(Android)
         {
-            install(Logging){
+            install(Logging) {
                 level = LogLevel.ALL
             }
-            install(DefaultRequest){
+            install(DefaultRequest) {
                 url(Util.BASE_URL)
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
             }
-            install(ContentNegotiation){
-                json(Json{
+            install(ContentNegotiation) {
+                json(Json {
                     ignoreUnknownKeys = true
                     isLenient = true
 
@@ -104,19 +106,19 @@ object ShelvdModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ShelvdBindsModule{
+abstract class ShelvdBindsModule {
 
     @Singleton
     @Binds
     abstract fun bindBookRepo(
         defaultBookRepository: DefaultBookRepository
-    ):BookRepository
+    ): BookRepository
 
     @Singleton
     @Binds
     abstract fun bindIsbnScanner(
         isbnScannerImpl: IsbnScannerImpl
-    ):IsbnScanner
+    ): IsbnScanner
 
 }
 
