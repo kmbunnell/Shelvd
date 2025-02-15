@@ -41,6 +41,7 @@ class BookRepositoryTest {
         })
     }
     val bookRepo = DefaultBookRepository(mockApi, testDispatcher)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
@@ -53,50 +54,59 @@ class BookRepositoryTest {
     fun tearDown() {
         Dispatchers.resetMain()
     }
+
     @Test
-    fun `lookUpBookByISBN returns ShelvedBook`() =  runTest(testDispatcher) {
+    fun `lookUpBookByISBN returns ShelvedBook`() = runTest(testDispatcher) {
         val shelvedBook = bookRepo.lookUpBookByISBN("isbn").first()
-        assertEquals(shelvedBook?.title,"A Court of Thorns and Roses")
+        assertEquals(shelvedBook?.title, "A Court of Thorns and Roses")
     }
 
     @Test
     fun `load books from Owned Shelf`() = runTest(testDispatcher) {
         val expected = listOf(
-                ShelvedBook(
-                    listOf("Sarah J Maas"),
-                    "A Court of Silver Flames",
-                    isbn = "",
-                    Shelf.OWNED
-                ),
-                    ShelvedBook(
-                        listOf("Jay Kristoff"),
-                        "Empire of the Vampire",
-                        isbn = "",
-                        Shelf.OWNED
-                    ),
-                    ShelvedBook(
-                        listOf("Brigid Kemmerer"),
-                        "Defy the Night",
-                        isbn = "",
-                        Shelf.OWNED
-                    ),
-                    ShelvedBook(
-                        listOf("Brandon Sanderson"),
-                        "Mistborn: The final Empire",
-                        isbn = "",
-                        Shelf.OWNED
-                    )
+            ShelvedBook(
+                listOf("Sarah J Maas"),
+                "A Court of Silver Flames",
+                isbn = "",
+                Shelf.OWNED
+            ),
+            ShelvedBook(
+                listOf("Jay Kristoff"),
+                "Empire of the Vampire",
+                isbn = "",
+                Shelf.OWNED
+            ),
+            ShelvedBook(
+                listOf("Brigid Kemmerer"),
+                "Defy the Night",
+                isbn = "",
+                Shelf.OWNED
+            ),
+            ShelvedBook(
+                listOf("Brandon Sanderson"),
+                "Mistborn: The final Empire",
+                isbn = "",
+                Shelf.OWNED
+            )
         )
         val books = bookRepo.getShelvedBooksByShelf(Shelf.OWNED)
         assertEquals(books, expected)
 
     }
+
     @Test
     fun `load books from want Shelf`() = runTest(testDispatcher) {
-        val expected = listOf( ShelvedBook(authors= listOf("Jennifer Armentrout"), title="A Soul of Blood and Ash", isbn="", shelf= Shelf.WANT))
+        val expected = listOf(
+            ShelvedBook(
+                authors = listOf("Jennifer Armentrout"),
+                title = "A Soul of Blood and Ash",
+                isbn = "",
+                shelf = Shelf.WANT
+            )
+        )
         val books = bookRepo.getShelvedBooksByShelf(Shelf.WANT)
         assertEquals(books, expected)
 
     }
-    
+
 }

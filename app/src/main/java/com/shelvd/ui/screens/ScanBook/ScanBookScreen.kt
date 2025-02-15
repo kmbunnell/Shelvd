@@ -50,20 +50,29 @@ fun ScanBookRoute(viewModel: ScanBookVm = hiltViewModel()) {
 @Composable
 fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit) {
 
-    Column(modifier = Modifier
-        .padding(16.dp)
-        .fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
 
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
             var selectedIndex by remember { mutableIntStateOf(0) }
-            LookUpOptions(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp), selectedIndex) {
+            LookUpOptions(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                selectedIndex
+            ) {
                 selectedIndex = it
             }
 
-            LookUpBy(modifier = Modifier.padding(bottom = 10.dp),
-                selectedIndex=  selectedIndex,
-                onAction= onAction)
+            LookUpBy(
+                modifier = Modifier.padding(bottom = 10.dp),
+                selectedIndex = selectedIndex,
+                onAction = onAction
+            )
 
             HorizontalDivider(color = Color.Blue, thickness = 1.dp)
         }
@@ -82,8 +91,9 @@ fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit)
     }
 
 }
+
 @Composable
-fun ScanButton(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> Unit){
+fun ScanButton(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> Unit) {
     Button(modifier = modifier.width(200.dp),
         onClick = {
             onAction(ScanBookIntent.StartScan)
@@ -94,16 +104,16 @@ fun ScanButton(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> Unit
 }
 
 @Composable
-fun LookUpBy(modifier: Modifier, selectedIndex: Int, onAction: (ScanBookIntent) -> Unit)
-{
+fun LookUpBy(modifier: Modifier, selectedIndex: Int, onAction: (ScanBookIntent) -> Unit) {
     if (selectedIndex == 0)
         ScanButton(modifier = modifier, onAction = onAction)
     else
-        IsbnLookUpRow(modifier = modifier, onAction  = onAction)
+        IsbnLookUpRow(modifier = modifier, onAction = onAction)
 
 }
+
 @Composable
-fun LookUpOptions(modifier: Modifier = Modifier, selectedIndex: Int, onChanged: (Int)-> Unit) {
+fun LookUpOptions(modifier: Modifier = Modifier, selectedIndex: Int, onChanged: (Int) -> Unit) {
 
     val options = listOf(stringResource(R.string.scan), stringResource(R.string.isbn))
 
@@ -147,10 +157,12 @@ fun IsbnLookUpRow(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> U
 @Composable
 fun BookFound(book: ShelvedBook, onAction: (ScanBookIntent) -> Unit) {
     var selectedShelf by remember { mutableStateOf(book.shelf) }
-    Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+    Column(modifier = Modifier
+        .padding(16.dp)
+        .fillMaxWidth()) {
         Text(text = book.title)
         Text(text = book.authors[0])
-        Row( verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 modifier = Modifier.padding(end = 10.dp),
                 text = stringResource(R.string.shelveOn)
@@ -171,33 +183,33 @@ fun BookFound(book: ShelvedBook, onAction: (ScanBookIntent) -> Unit) {
 }
 
 @Composable
-fun ShelfSelectDropDown(selectedShelf:Shelf, onShelfSelection: (Shelf) -> Unit) {
+fun ShelfSelectDropDown(selectedShelf: Shelf, onShelfSelection: (Shelf) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-        Text(
-            text = selectedShelf.shelfName
-        )
-        IconButton(
-            onClick = { expanded = !expanded }) {
-            Icon(Icons.Filled.ArrowDropDown, contentDescription = "Shelves")
-        }
+    Text(
+        text = selectedShelf.shelfName
+    )
+    IconButton(
+        onClick = { expanded = !expanded }) {
+        Icon(Icons.Filled.ArrowDropDown, contentDescription = "Shelves")
+    }
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            Shelf.entries.forEach { shelf ->
-                DropdownMenuItem(
-                    onClick = {
-                        onShelfSelection(shelf)
-                        expanded = false
-                    },
-                    text = {
-                        Text(text = shelf.shelfName)
-                    }
-                )
-            }
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false },
+    ) {
+        Shelf.entries.forEach { shelf ->
+            DropdownMenuItem(
+                onClick = {
+                    onShelfSelection(shelf)
+                    expanded = false
+                },
+                text = {
+                    Text(text = shelf.shelfName)
+                }
+            )
         }
+    }
 }
 
 @Composable

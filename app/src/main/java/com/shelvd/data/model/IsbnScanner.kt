@@ -6,14 +6,14 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
-interface IsbnScanner{
+interface IsbnScanner {
     val scanner: GmsBarcodeScanner
 }
 
-class IsbnScannerImpl(appContext: Context): IsbnScanner {
+class IsbnScannerImpl(appContext: Context) : IsbnScanner {
     private val options = GmsBarcodeScannerOptions.Builder()
         .setBarcodeFormats(Barcode.FORMAT_EAN_13)
         .enableAutoZoom().build()
 
-     override val scanner = GmsBarcodeScanning.getClient(appContext, options)
+    override val scanner = GmsBarcodeScanning.getClient(appContext, options)
 }

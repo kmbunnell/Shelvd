@@ -12,8 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShelvesVM @Inject constructor(
-   val bookRepository: BookRepository
-    ): ViewModel() {
+    val bookRepository: BookRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<ShelvesViewState>(ShelvesViewState.Loading)
     val state: StateFlow<ShelvesViewState> = _state
 
@@ -23,12 +23,13 @@ class ShelvesVM @Inject constructor(
 
     fun handleIntent(intent: ShelvesIntent) {
         when (intent) {
-            is ShelvesIntent.LoadBooks -> { loadBooks(intent.shelf) }
+            is ShelvesIntent.LoadBooks -> {
+                loadBooks(intent.shelf)
+            }
         }
     }
 
-    private fun loadBooks(shelf:Shelf)
-    {
+    private fun loadBooks(shelf: Shelf) {
         _state.value = ShelvesViewState.Loading
         viewModelScope.launch {
             _state.value = try {

@@ -22,15 +22,14 @@ import com.shelvd.data.model.Shelf
 
 
 @Composable
-fun ShelvesRoute( viewModel: ShelvesVM = hiltViewModel())
-{
+fun ShelvesRoute(viewModel: ShelvesVM = hiltViewModel()) {
     val currentState by viewModel.state.collectAsStateWithLifecycle()
     ShelvesScreen(currentState, viewModel::handleIntent)
 
 }
 
 @Composable
-fun ShelvesScreen(state:ShelvesViewState,  onAction: (ShelvesIntent) -> Unit) {
+fun ShelvesScreen(state: ShelvesViewState, onAction: (ShelvesIntent) -> Unit) {
     Column {
         ShelfRow(onAction)
 
@@ -46,36 +45,38 @@ fun ShelvesScreen(state:ShelvesViewState,  onAction: (ShelvesIntent) -> Unit) {
 }
 
 @Composable
-fun Loading()
-{
+fun Loading() {
     Text("Loading")
 }
 
 @Composable
-fun BookShelf(shelvedBooks:List<ShelvedBook>)
-{
+fun BookShelf(shelvedBooks: List<ShelvedBook>) {
     LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
         items(shelvedBooks.size) { idx ->
             Text(text = shelvedBooks[idx].title)
         }
     }
 }
+
 @Composable
-fun ShelfRow( onAction: (ShelvesIntent) -> Unit )
-{
+fun ShelfRow(onAction: (ShelvesIntent) -> Unit) {
     var selectedIndex by remember {
         mutableIntStateOf(-1)
     }
 
-    Column(modifier=Modifier.padding(horizontal = 10.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 10.dp)) {
         LazyRow {
             items(Shelf.entries.size) { idx ->
                 Text(
-                    text =Shelf.entries[idx].name,
-                    modifier = Modifier.padding(horizontal = 5.dp).selectable(
-                        selected = selectedIndex == idx,
-                        onClick = { selectedIndex = if (selectedIndex == idx) -1 else idx
-                                    onAction(ShelvesIntent.LoadBooks(Shelf.entries[idx]))})
+                    text = Shelf.entries[idx].name,
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .selectable(
+                            selected = selectedIndex == idx,
+                            onClick = {
+                                selectedIndex = if (selectedIndex == idx) -1 else idx
+                                onAction(ShelvesIntent.LoadBooks(Shelf.entries[idx]))
+                            })
                         .background(
                             if (selectedIndex == idx) Color.Gray
                             else Color.Transparent
