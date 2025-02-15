@@ -44,7 +44,7 @@ class ShelvesVMTest {
     }
 
     @Test
-    fun `load books`() = runTest(testDispatcher) {
+    fun `load owned books`() = runTest(testDispatcher) {
         whenever(bookrepo.getShelvedBooksByShelf(Shelf.OWNED)).thenReturn(testOwnedShelvedBooks)
         val vm = ShelvesVM(bookrepo)
         assertEquals(vm.state.value, ShelvesViewState.ShelvedBooks(shelvedBooks = testOwnedShelvedBooks))
