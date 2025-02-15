@@ -1,7 +1,5 @@
 package com.shelvd.domain
 
-import com.shelvd.data.model.ApiResult
-import com.shelvd.data.model.BookResult
 import com.shelvd.data.model.IsbnScanner
 import com.shelvd.data.model.ShelvedBook
 import kotlinx.coroutines.channels.awaitClose

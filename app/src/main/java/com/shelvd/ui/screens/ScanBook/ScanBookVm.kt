@@ -2,13 +2,10 @@ package com.shelvd.ui.screens.scanBook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shelvd.data.model.ApiResult
-import com.shelvd.data.model.BookResult
-import com.shelvd.data.model.IsbnScanner
 import com.shelvd.data.model.ShelvedBook
+import com.shelvd.data.repo.BookRepository
 import com.shelvd.domain.IsbnLookUpUseCase
 import com.shelvd.domain.ScanBookUseCase
-import com.shelvd.domain.ShelveBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +16,7 @@ import javax.inject.Inject
 class ScanBookVm @Inject constructor(
     private val scanBookUseCase: ScanBookUseCase,
     private val isbnLookUpUseCase: IsbnLookUpUseCase,
-    private val shelveBookUseCase: ShelveBookUseCase
+    private val bookRepository: BookRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ScanBookViewState>(ScanBookViewState.AwaitScan)
@@ -40,10 +37,10 @@ class ScanBookVm @Inject constructor(
             }
         }
     }
-    private fun shelveBook(book:ShelvedBook)
-    {
+
+    private fun shelveBook(book: ShelvedBook) {
         viewModelScope.launch {
-            shelveBookUseCase.invoke(book)
+            bookRepository.addBookToShelf(book)
         }
     }
 

@@ -2,7 +2,7 @@ package com.example.shelvd.ui.shelves
 
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.model.Shelf
-import com.shelvd.domain.LoadBooksForShelfUseCase
+import com.shelvd.data.repo.BookRepository
 import com.shelvd.ui.screens.shelves.ShelvesVM
 import com.shelvd.ui.screens.shelves.ShelvesViewState
 import kotlinx.coroutines.Dispatchers
@@ -16,17 +16,19 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
+
 import org.mockito.kotlin.whenever
 
 class ShelvesVMTest {
 
-    val mockBookService:LoadBooksForShelfUseCase = mock()
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = UnconfinedTestDispatcher()
     val testOwnedShelvedBooks= listOf(
         ShelvedBook(listOf("Kristina Bunnell"), "Most Amazing Book Ever", "isbn", Shelf.OWNED),
         ShelvedBook(listOf("K Bear"), "Hot Vampires","isbn", Shelf.OWNED)
     )
+    val bookrepo = mock<BookRepository>()
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -43,8 +45,8 @@ class ShelvesVMTest {
 
     @Test
     fun `load books`() = runTest(testDispatcher) {
-        whenever(mockBookService.invoke(Shelf.OWNED)).thenReturn(testOwnedShelvedBooks)
-        val vm = ShelvesVM(mockBookService)
+        whenever(bookrepo.getShelvedBooksByShelf(Shelf.OWNED)).thenReturn(testOwnedShelvedBooks)
+        val vm = ShelvesVM(bookrepo)
         assertEquals(vm.state.value, ShelvesViewState.ShelvedBooks(shelvedBooks = testOwnedShelvedBooks))
 
     }
