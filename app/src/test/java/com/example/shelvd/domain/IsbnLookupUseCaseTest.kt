@@ -32,7 +32,7 @@ class IsbnLookupUseCaseTest {
     fun `book lookup success`() = runTest(testDispatcher) {
         val usecase = IsbnLookUpUseCase(bookRepository, testDispatcher)
         val item = usecase.invoke("isbn").first()
-        assertEquals(item?.title, "A Court of Thorns and Roses")
+        assertEquals(item.first?.title, "A Court of Thorns and Roses")
     }
 
 }

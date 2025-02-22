@@ -24,7 +24,7 @@ class ScanBookVm @Inject constructor(
 
     fun handleIntent(intent: ScanBookIntent) {
         when (intent) {
-            is ScanBookIntent.StartScan -> {
+             ScanBookIntent.StartScan -> {
                 scan()
             }
 
@@ -35,19 +35,15 @@ class ScanBookVm @Inject constructor(
             is ScanBookIntent.ShelveBook -> {
                 shelveBook(intent.book.copy(shelf = intent.shelf))
             }
-        }
-    }
 
-    private fun shelveBook(book: ShelvedBook) {
-        viewModelScope.launch {
-            bookRepository.addBookToShelf(book)
+            ScanBookIntent.ResetScreen->{ reset() }
         }
     }
 
     private fun scan() {
         viewModelScope.launch {
             scanBookUseCase.invoke().collect { result ->
-                updateUIState(result)
+                bookLookUpResult(result)
 
             }
         }
@@ -56,16 +52,30 @@ class ScanBookVm @Inject constructor(
     private fun lookUp(isbn: String) {
         viewModelScope.launch {
             isbnLookUpUseCase.invoke(isbn).collect { result ->
-                updateUIState(result)
+                bookLookUpResult(result)
             }
         }
     }
 
-    private fun updateUIState(book: ShelvedBook?) {
-        if (book != null)
-            _state.value = ScanBookViewState.BookScanSuccess(book)
-        else
-            _state.value = ScanBookViewState.BookScanError("Isbn look up failed")
+    private fun bookLookUpResult(lookUpResult:Pair<ShelvedBook?, Boolean>) {
+        lookUpResult.first?.let { book->
+            _state.value = ScanBookViewState.BookScanSuccess(book, lookUpResult.second)
+
+        }?:setErrorState()
     }
 
+    private fun setErrorState()
+    {
+        _state.value = ScanBookViewState.BookScanError("Look up failed")
+    }
+
+    private fun shelveBook(book: ShelvedBook) {
+        bookRepository.addBookToShelf(book)
+        reset()
+    }
+
+    private fun reset()
+    {
+        _state.value = ScanBookViewState.AwaitScan
+    }
 }

@@ -9,6 +9,6 @@
     <string name="isbn">ISBN</string>
     <string name="shelve">Shelve</string>
     <string name="shelveOn">Shelve On: </string>
-
-
+    <string name="ok">Ok</string>
+    <string name="dupDetected">"%1$s is already shelved on %2$s"</string>
 </resources>

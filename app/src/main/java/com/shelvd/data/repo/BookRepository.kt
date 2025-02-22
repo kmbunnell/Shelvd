@@ -3,35 +3,31 @@ package com.shelvd.data.repo
 import com.shelvd.data.api.ApiService
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.model.Shelf
-import com.shelvd.di.DefaultDispatcher
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
 interface BookRepository {
-    suspend fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook>
-    suspend fun addBookToShelf(newBook: ShelvedBook)
+    fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook>
+    fun addBookToShelf(newBook: ShelvedBook)
+    fun checkForDuplicate(newBook: ShelvedBook): ShelvedBook?
     fun removeBookFromShelf(idx: Int)
     fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?>
 }
 
 class DefaultBookRepository @Inject constructor(
     val apiService: ApiService,
-    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : BookRepository {
     private val shelvedBookList: MutableList<ShelvedBook> = mutableListOf()
 
-    private fun loadShelvedBooks(): List<ShelvedBook> {
+    fun loadShelvedBooks(): List<ShelvedBook> {
         if (shelvedBookList.size == 0) {
             shelvedBookList.add(
                 ShelvedBook(
                     listOf("Sarah J Maas"),
                     "A Court of Silver Flames",
-                    isbn = "",
+                    isbn = "12345",
                     Shelf.OWNED
                 )
             )
@@ -63,7 +59,7 @@ class DefaultBookRepository @Inject constructor(
                 ShelvedBook(
                     listOf("Brigid Kemmerer"),
                     "Carving Shadows Into Gold",
-                    isbn = "",
+                    isbn = "7894",
                     Shelf.PREORDERED
                 )
             )
@@ -87,18 +83,17 @@ class DefaultBookRepository @Inject constructor(
         return shelvedBookList.toList()
     }
 
-    override suspend fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook> =
-        withContext(defaultDispatcher) {
+    override fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook> {
+
             if (shelvedBookList.isEmpty())
                 loadShelvedBooks()
 
-            shelvedBookList.filter { it.shelf == shelf }
+           return  shelvedBookList.filter { it.shelf == shelf }
         }
 
-    override suspend fun addBookToShelf(newBook: ShelvedBook): Unit =
-        withContext(defaultDispatcher) {
-            shelvedBookList.add(newBook)
-        }
+    override fun addBookToShelf(newBook: ShelvedBook){
+        shelvedBookList.add(newBook)
+    }
 
 
     override fun removeBookFromShelf(idx: Int) {
@@ -115,5 +110,7 @@ class DefaultBookRepository @Inject constructor(
                 )
             }
         }
+
+    override fun checkForDuplicate(newBook:ShelvedBook): ShelvedBook? = shelvedBookList.find { it.isbn == newBook.isbn }
 
 }

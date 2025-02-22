@@ -4,7 +4,6 @@ import com.shelvd.data.model.ShelvedBook
 
 sealed class ScanBookViewState {
     object AwaitScan : ScanBookViewState()
-    data class Success(val s: String) : ScanBookViewState()
-    data class BookScanSuccess(val book: ShelvedBook) : ScanBookViewState()
+    data class BookScanSuccess(val book: ShelvedBook, val isDup: Boolean) : ScanBookViewState()
     data class BookScanError(val message: String) : ScanBookViewState()
 }

@@ -12,7 +12,7 @@ class ScanBookUseCase(
     val isbnLookUpUseCase: IsbnLookUpUseCase,
 ) {
 
-    operator fun invoke(): Flow<ShelvedBook?> {
+    operator fun invoke(): Flow<Pair<ShelvedBook?, Boolean>> {
         return callbackFlow {
             isbnScanner.scanner.startScan()
                 .addOnSuccessListener { barcode ->
