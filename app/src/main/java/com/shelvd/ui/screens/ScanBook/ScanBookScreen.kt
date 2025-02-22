@@ -66,6 +66,7 @@ fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit)
                 selectedIndex
             ) {
                 selectedIndex = it
+                onAction(ScanBookIntent.ResetScreen)
             }
 
             LookUpBy(

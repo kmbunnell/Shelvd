@@ -7,4 +7,5 @@ sealed class ScanBookIntent {
     object StartScan : ScanBookIntent()
     data class LookUp(val isbn: String) : ScanBookIntent()
     data class ShelveBook(val book: ShelvedBook, val shelf: Shelf) : ScanBookIntent()
+    object ResetScreen: ScanBookIntent()
 }
