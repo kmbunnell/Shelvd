@@ -1,22 +1,11 @@
 package com.shelvd.ui.screens.scanBook
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -36,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.shelvd.R
-import com.shelvd.data.model.Shelf
 import com.shelvd.data.model.ShelvedBook
 
 
@@ -80,7 +68,7 @@ fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit)
 
         when (state) {
             is ScanBookViewState.BookScanSuccess -> {
-                BookFound(state.book, onAction = onAction)
+                BookFoundScreen(state.book, state.isDup,  onAction = onAction)
             }
 
             is ScanBookViewState.BookScanError -> {
@@ -94,15 +82,12 @@ fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit)
 }
 
 @Composable
-fun ScanButton(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> Unit) {
-    Button(modifier = modifier.width(200.dp),
-        onClick = {
-            onAction(ScanBookIntent.StartScan)
-        }
-    ) {
-        Text(text = stringResource(R.string.scan))
-    }
+fun BookInfo(book:ShelvedBook)
+{
+    Text(text = book.title)
+    Text(text = book.authors[0])
 }
+
 
 @Composable
 fun LookUpBy(modifier: Modifier, selectedIndex: Int, onAction: (ScanBookIntent) -> Unit) {
@@ -151,64 +136,6 @@ fun IsbnLookUpRow(modifier: Modifier = Modifier, onAction: (ScanBookIntent) -> U
             }
         ) {
             Text(text = stringResource(R.string.find))
-        }
-    }
-}
-
-@Composable
-fun BookFound(book: ShelvedBook, onAction: (ScanBookIntent) -> Unit) {
-    var selectedShelf by remember { mutableStateOf(book.shelf) }
-    Column(modifier = Modifier
-        .padding(16.dp)
-        .fillMaxWidth()) {
-        Text(text = book.title)
-        Text(text = book.authors[0])
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                modifier = Modifier.padding(end = 10.dp),
-                text = stringResource(R.string.shelveOn)
-            )
-            ShelfSelectDropDown(selectedShelf, onShelfSelection = { selectedShelf = it })
-
-        }
-        Row(modifier = Modifier.align(Alignment.End)) {
-            Button(
-                onClick = {
-                    onAction(ScanBookIntent.ShelveBook(book, selectedShelf))
-                },
-            ) {
-                Text(text = stringResource(R.string.shelve))
-            }
-        }
-    }
-}
-
-@Composable
-fun ShelfSelectDropDown(selectedShelf: Shelf, onShelfSelection: (Shelf) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Text(
-        text = selectedShelf.shelfName
-    )
-    IconButton(
-        onClick = { expanded = !expanded }) {
-        Icon(Icons.Filled.ArrowDropDown, contentDescription = "Shelves")
-    }
-
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { expanded = false },
-    ) {
-        Shelf.entries.forEach { shelf ->
-            DropdownMenuItem(
-                onClick = {
-                    onShelfSelection(shelf)
-                    expanded = false
-                },
-                text = {
-                    Text(text = shelf.shelfName)
-                }
-            )
         }
     }
 }

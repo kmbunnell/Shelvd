@@ -28,7 +28,7 @@ class ScanFoundBookVmTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-    val shelvedBook = ShelvedBook(listOf("K Bear"), "Best book", isbn = "12345")
+    val shelvedBook = Pair(ShelvedBook(listOf("K Bear"), "Best book", isbn = "12345"), false)
     private val mockScanBookUseCase = mock<ScanBookUseCase>() {
         on { invoke() }.thenReturn((flow {
             emit(shelvedBook)
@@ -66,7 +66,7 @@ class ScanFoundBookVmTest {
             bookRepository = mockBookRepo
         )
         vm.handleIntent(ScanBookIntent.StartScan)
-        assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook))
+        assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook.first,false))
     }
 
     @Test
@@ -77,7 +77,7 @@ class ScanFoundBookVmTest {
             bookRepository = mockBookRepo
         )
         vm.handleIntent(ScanBookIntent.LookUp("12345"))
-        assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook))
+        assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook.first, false))
     }
 
 }

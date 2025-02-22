@@ -57,18 +57,21 @@ class ScanBookVm @Inject constructor(
         }
     }
 
-    private fun bookLookUpResult(book: ShelvedBook?) {
-        if (book != null)
-            _state.value = ScanBookViewState.BookScanSuccess(book)
-        else
-            _state.value = ScanBookViewState.BookScanError("Look up failed")
+    private fun bookLookUpResult(lookUpResult:Pair<ShelvedBook?, Boolean>) {
+        lookUpResult.first?.let { book->
+            _state.value = ScanBookViewState.BookScanSuccess(book, lookUpResult.second)
+
+        }?:setErrorState()
+    }
+
+    private fun setErrorState()
+    {
+        _state.value = ScanBookViewState.BookScanError("Look up failed")
     }
 
     private fun shelveBook(book: ShelvedBook) {
-        viewModelScope.launch {
-            bookRepository.addBookToShelf(book)
-            reset()
-        }
+        bookRepository.addBookToShelf(book)
+        reset()
     }
 
     private fun reset()

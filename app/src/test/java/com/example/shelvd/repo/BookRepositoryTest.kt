@@ -7,17 +7,12 @@ import com.shelvd.data.model.Doc
 import com.shelvd.data.model.Shelf
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.repo.DefaultBookRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
 
@@ -40,9 +35,9 @@ class BookRepositoryTest {
             )
         })
     }
-    val bookRepo = DefaultBookRepository(mockApi, testDispatcher)
+    val bookRepo = DefaultBookRepository(mockApi)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /*@OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
 
@@ -53,7 +48,7 @@ class BookRepositoryTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-    }
+    }*/
 
     @Test
     fun `lookUpBookByISBN returns ShelvedBook`() = runTest(testDispatcher) {
@@ -67,7 +62,7 @@ class BookRepositoryTest {
             ShelvedBook(
                 listOf("Sarah J Maas"),
                 "A Court of Silver Flames",
-                isbn = "",
+                isbn = "12345",
                 Shelf.OWNED
             ),
             ShelvedBook(
@@ -109,4 +104,31 @@ class BookRepositoryTest {
 
     }
 
+    @Test
+    fun `find duplicate`() {
+        val newBook =  ShelvedBook(
+            listOf("Brigid Kemmerer"),
+            "Carving Shadows Into Gold",
+            isbn = "7894",
+            Shelf.PREORDERED
+        )
+        bookRepo.loadShelvedBooks()
+        val dup = bookRepo.checkForDuplicate(newBook)
+
+        assertEquals(newBook, dup)
+    }
+
+    @Test
+    fun `no duplicate`() {
+        val newBook = ShelvedBook(
+            listOf("K bear"),
+            "Amazing Book  ",
+            isbn = "7897",
+            Shelf.WANT
+        )
+
+        val dup = bookRepo.checkForDuplicate(newBook)
+
+        assertEquals(dup, null)
+    }
 }
