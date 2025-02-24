@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.after
 import org.mockito.kotlin.mock
 
 class BookRepositoryTest {
@@ -130,5 +131,21 @@ class BookRepositoryTest {
         val dup = bookRepo.checkForDuplicate(newBook)
 
         assertEquals(dup, null)
+    }
+
+    @Test
+    fun `add book()`()
+    {
+        val newBook =ShelvedBook(
+        listOf("K bear"),
+        "Amazing Book  ",
+        isbn = "7897",
+        Shelf.WANT
+        )
+       val beforeCount = bookRepo.loadShelvedBooks().filter { it.shelf == Shelf.WANT }.size
+        bookRepo.addBookToShelf(newBook)
+        val afterCount = bookRepo.getShelvedBooksByShelf(Shelf.WANT).size
+        assertEquals(afterCount, beforeCount+1)
+
     }
 }
