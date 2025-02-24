@@ -4,6 +4,7 @@ import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.repo.BookRepository
 import com.shelvd.domain.IsbnLookUpUseCase
 import com.shelvd.domain.ScanBookUseCase
+import com.shelvd.domain.ShelveBookUseCase
 import com.shelvd.ui.screens.scanBook.ScanBookIntent
 import com.shelvd.ui.screens.scanBook.ScanBookViewState
 import com.shelvd.ui.screens.scanBook.ScanBookVm
@@ -25,7 +26,6 @@ import org.junit.Assert.assertEquals
 
 class ScanFoundBookVmTest {
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
     val shelvedBook = Pair(ShelvedBook(listOf("K Bear"), "Best book", isbn = "12345"), false)
@@ -40,7 +40,7 @@ class ScanFoundBookVmTest {
             emit(shelvedBook)
         })
     }
-
+    private val shelveBookUseCase = mock<ShelveBookUseCase>()
     private val mockBookRepo = mock<BookRepository>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -63,7 +63,7 @@ class ScanFoundBookVmTest {
         val vm = ScanBookVm(
             scanBookUseCase = mockScanBookUseCase,
             isbnLookUpUseCase = mockIsbnLookUpUseCase,
-            bookRepository = mockBookRepo
+            shelveBookUseCase = shelveBookUseCase
         )
         vm.handleIntent(ScanBookIntent.StartScan)
         assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook.first,false))
@@ -74,7 +74,7 @@ class ScanFoundBookVmTest {
         val vm = ScanBookVm(
             scanBookUseCase = mockScanBookUseCase,
             isbnLookUpUseCase = mockIsbnLookUpUseCase,
-            bookRepository = mockBookRepo
+            shelveBookUseCase = shelveBookUseCase
         )
         vm.handleIntent(ScanBookIntent.LookUp("12345"))
         assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook.first, false))
