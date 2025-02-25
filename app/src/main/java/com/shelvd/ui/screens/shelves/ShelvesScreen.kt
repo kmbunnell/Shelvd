@@ -61,7 +61,7 @@ fun BookShelf(shelvedBooks: List<ShelvedBook>) {
 @Composable
 fun ShelfRow(onAction: (ShelvesIntent) -> Unit) {
     var selectedIndex by remember {
-        mutableIntStateOf(-1)
+        mutableIntStateOf(0)
     }
 
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {

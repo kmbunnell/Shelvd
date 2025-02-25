@@ -6,8 +6,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ScanBookUseCase(
+class ScanBookUseCase  @Inject constructor(
     val isbnScanner: IsbnScanner,
     val isbnLookUpUseCase: IsbnLookUpUseCase,
 ) {
@@ -32,6 +33,3 @@ class ScanBookUseCase(
         }
     }
 }
-
-
-

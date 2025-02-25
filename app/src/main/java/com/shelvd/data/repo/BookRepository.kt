@@ -10,10 +10,11 @@ import javax.inject.Inject
 
 interface BookRepository {
     fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook>
-    fun addBookToShelf(newBook: ShelvedBook)
+    fun addNewBook(newBook: ShelvedBook)
     fun checkForDuplicate(newBook: ShelvedBook): ShelvedBook?
-    fun removeBookFromShelf(idx: Int)
+    fun deleteBook(book:ShelvedBook)
     fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?>
+    fun moveBookToNewShelf(book:ShelvedBook, shelf:Shelf)
 }
 
 class DefaultBookRepository @Inject constructor(
@@ -80,7 +81,7 @@ class DefaultBookRepository @Inject constructor(
                 )
             )
         }
-        return shelvedBookList.toList()
+        return shelvedBookList
     }
 
     override fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook> {
@@ -88,16 +89,16 @@ class DefaultBookRepository @Inject constructor(
             if (shelvedBookList.isEmpty())
                 loadShelvedBooks()
 
-           return  shelvedBookList.filter { it.shelf == shelf }
+           return  shelvedBookList.filter { it.shelf == shelf }.toList()
         }
 
-    override fun addBookToShelf(newBook: ShelvedBook){
+    override fun addNewBook(newBook: ShelvedBook){
         shelvedBookList.add(newBook)
     }
 
 
-    override fun removeBookFromShelf(idx: Int) {
-        shelvedBookList.removeAt(idx)
+    override fun deleteBook(book: ShelvedBook) {
+        shelvedBookList.remove(book)
     }
 
     override fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?> =
@@ -112,5 +113,11 @@ class DefaultBookRepository @Inject constructor(
         }
 
     override fun checkForDuplicate(newBook:ShelvedBook): ShelvedBook? = shelvedBookList.find { it.isbn == newBook.isbn }
-
+    override fun moveBookToNewShelf(book: ShelvedBook, shelf: Shelf) {
+        shelvedBookList.find{it.isbn == book.isbn}?.let{ currentBook ->
+            val idx = shelvedBookList.indexOf(currentBook)
+            if(idx!=-1)
+                shelvedBookList.set(idx, currentBook.copy(shelf = shelf))
+        }
+    }
 }
