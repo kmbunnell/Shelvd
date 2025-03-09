@@ -38,7 +38,7 @@ fun BookFoundScreen(book: ShelvedBook, isDup: Boolean, onAction: (ScanBookIntent
             ShelfDropDownRow(
                 selectedShelf,
                 onShelfSelection = { selectedShelf = it },
-                onShelveClick = { onAction(ScanBookIntent.ShelveBook(book, selectedShelf)) })
+                onShelveButtonClick = { onAction(ScanBookIntent.ShelveBook(book, selectedShelf)) })
 
         }
     }
