@@ -1,6 +1,7 @@
 package com.shelvd.ui.screens.shelves
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -19,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.model.Shelf
+import kotlin.math.exp
 
 
 @Composable
@@ -51,13 +54,40 @@ fun Loading() {
 
 @Composable
 fun BookShelf(shelvedBooks: List<ShelvedBook>) {
-    LazyColumn(modifier = Modifier.padding(top = 20.dp).padding(horizontal = 20.dp)) {
+    var expandedIdx by remember {
+        mutableIntStateOf(-1)
+    }
+    LazyColumn(modifier = Modifier
+        .padding(top = 20.dp)
+        .padding(horizontal = 20.dp)) {
         items(shelvedBooks.size) { idx ->
-            Text(modifier = Modifier.padding(bottom = 3.dp),
-                text = shelvedBooks[idx].title)
+            val book = shelvedBooks[idx]
+            BookShelfItem(
+                expandedIdx, idx, book.title,
+                onSelected = { expandedIdx = if(expandedIdx == idx) -1 else idx },
+                onReshelve = {},
+                onRemove = {})
+
         }
     }
 }
+
+@Composable
+fun BookShelfItem(expanded:Int, idx:Int, title:String, onSelected: ()->Unit, onReshelve: ()->Unit, onRemove:()->Unit)
+{
+    Text(modifier = Modifier
+        .padding(bottom = 3.dp)
+        .selectable(
+            selected = expanded == idx,
+            onClick = { onSelected() }),
+        text = title)
+
+    if(expanded == idx)
+        Text(text="hi")
+
+
+}
+
 
 @Composable
 fun ShelfRow(onAction: (ShelvesIntent) -> Unit) {

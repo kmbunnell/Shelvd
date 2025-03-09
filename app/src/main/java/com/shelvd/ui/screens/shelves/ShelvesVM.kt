@@ -26,6 +26,9 @@ class ShelvesVM @Inject constructor(
             is ShelvesIntent.LoadBooks -> {
                 loadBooks(intent.shelf)
             }
+
+            is ShelvesIntent.DeleteBook -> TODO()
+            is ShelvesIntent.ReshelveBook -> TODO()
         }
     }
 
