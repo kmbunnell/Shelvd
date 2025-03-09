@@ -51,9 +51,10 @@ fun Loading() {
 
 @Composable
 fun BookShelf(shelvedBooks: List<ShelvedBook>) {
-    LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
+    LazyColumn(modifier = Modifier.padding(top = 20.dp).padding(horizontal = 20.dp)) {
         items(shelvedBooks.size) { idx ->
-            Text(text = shelvedBooks[idx].title)
+            Text(modifier = Modifier.padding(bottom = 3.dp),
+                text = shelvedBooks[idx].title)
         }
     }
 }
@@ -61,7 +62,7 @@ fun BookShelf(shelvedBooks: List<ShelvedBook>) {
 @Composable
 fun ShelfRow(onAction: (ShelvesIntent) -> Unit) {
     var selectedIndex by remember {
-        mutableIntStateOf(-1)
+        mutableIntStateOf(0)
     }
 
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
@@ -74,7 +75,7 @@ fun ShelfRow(onAction: (ShelvesIntent) -> Unit) {
                         .selectable(
                             selected = selectedIndex == idx,
                             onClick = {
-                                selectedIndex = if (selectedIndex == idx) -1 else idx
+                                selectedIndex = idx
                                 onAction(ShelvesIntent.LoadBooks(Shelf.entries[idx]))
                             })
                         .background(
