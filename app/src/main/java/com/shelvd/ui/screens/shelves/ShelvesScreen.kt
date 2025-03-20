@@ -44,11 +44,12 @@ fun ShelvesScreen(state: ShelvesViewState, onAction: (ShelvesIntent) -> Unit) {
 
         when (state) {
             is ShelvesViewState.ShelvedBooks -> {
-                BookShelf(state.shelvedBooks,
-                onDeleteBook = {
-                    onAction(ShelvesIntent.DeleteBook(it))
-                },
-                    onReshelveBook = {book, shelf->
+                BookShelf(
+                    state.shelvedBooks,
+                    onDeleteBook = {
+                        onAction(ShelvesIntent.DeleteBook(it))
+                    },
+                    onReshelveBook = { book, shelf ->
                         onAction(ShelvesIntent.ReshelveBook(book, shelf))
                     }
                 )
@@ -66,58 +67,72 @@ fun Loading() {
 }
 
 @Composable
-fun BookShelf(shelvedBooks: List<ShelvedBook>, onDeleteBook: (ShelvedBook)->Unit, onReshelveBook: (ShelvedBook, Shelf) -> Unit ) {
+fun BookShelf(
+    shelvedBooks: List<ShelvedBook>,
+    onDeleteBook: (ShelvedBook) -> Unit,
+    onReshelveBook: (ShelvedBook, Shelf) -> Unit
+) {
     var selectedIdx by remember {
         mutableIntStateOf(-1)
     }
 
-    LazyColumn(modifier = Modifier
-        .padding(top = 20.dp)
-        .padding(horizontal = 20.dp)) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(top = 20.dp)
+            .padding(horizontal = 20.dp)
+    ) {
         items(shelvedBooks.size) { idx ->
             val book = shelvedBooks[idx]
 
             BookShelfItem(
                 book = book,
-                showEditOptions = (selectedIdx==idx),
-                onSelected = { selectedIdx = if(selectedIdx==idx) -1 else idx },
+                showEditOptions = (selectedIdx == idx),
+                onSelected = { selectedIdx = if (selectedIdx == idx) -1 else idx },
                 onReshelveBook = onReshelveBook,
-                onRemove = onDeleteBook)
+                onRemove = onDeleteBook
+            )
 
         }
     }
 }
 
 @Composable
-fun BookShelfItem(book:ShelvedBook,
-                  showEditOptions:Boolean,
-                  onSelected: ()->Unit,
-                  onReshelveBook: (ShelvedBook, Shelf) -> Unit,
-                  onRemove:(ShelvedBook)->Unit)
-{
+fun BookShelfItem(
+    book: ShelvedBook,
+    showEditOptions: Boolean,
+    onSelected: () -> Unit,
+    onReshelveBook: (ShelvedBook, Shelf) -> Unit,
+    onRemove: (ShelvedBook) -> Unit
+) {
     var selectedShelf by remember { mutableStateOf(book.shelf) }
 
 
-       Text(
-           modifier = Modifier
-               .padding(bottom = 3.dp)
-               .clickable { onSelected() },
-           text = book.title
-       )
+    Text(
+        modifier = Modifier
+            .padding(bottom = 3.dp)
+            .clickable { onSelected() }
+            .background(
+                if (showEditOptions) Color.Blue
+                else Color.Transparent
+            ) ,
+        text = book.title
+    )
 
+    if (showEditOptions)
 
-
-    if(showEditOptions)
-
-        Column(modifier = Modifier.padding(start = 10.dp)) {
+        Column(modifier = Modifier.padding(start = 10.dp), horizontalAlignment = Alignment.Start) {
             HorizontalDivider(color = Color.Blue, thickness = 1.dp)
             ShelfDropDownRow(
                 selectedShelf = selectedShelf,
                 onShelfSelection = { selectedShelf = it },
                 onShelveButtonClick = { onReshelveBook(book, selectedShelf) }
             )
-            Button(modifier =Modifier.align(Alignment.Start), onClick =  {onRemove(book)}) { Text("Delete")}
-            HorizontalDivider(color = Color.Blue, thickness = 1.dp)
+            Button( onClick = { onRemove(book) }) {
+                Text(
+                    "Delete"
+                )
+            }
+            HorizontalDivider(color = Color.Blue, thickness = 1.dp, modifier = Modifier.padding(bottom = 3.dp))
         }
 }
 
