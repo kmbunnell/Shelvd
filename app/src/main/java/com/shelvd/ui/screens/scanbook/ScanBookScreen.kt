@@ -84,8 +84,10 @@ fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit)
 @Composable
 fun BookInfo(book:ShelvedBook)
 {
-    Text(text = book.title)
-    Text(text = book.authors[0])
+   Column (modifier = Modifier.padding(vertical = 5.dp)) {
+       Text(text = book.title)
+       Text(text = book.authors[0])
+   }
 }
 
 

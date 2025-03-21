@@ -9,11 +9,12 @@ import javax.inject.Inject
 
 
 interface BookRepository {
-    fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook>
     fun addBookToShelf(newBook: ShelvedBook)
     fun checkForDuplicate(newBook: ShelvedBook): ShelvedBook?
-    fun removeBookFromShelf(idx: Int)
+    fun removeBookFromShelf(book: ShelvedBook)
     fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?>
+    fun loadShelvedBooks(): List<ShelvedBook>
+    fun updateBookShelf(book:ShelvedBook)
 }
 
 class DefaultBookRepository @Inject constructor(
@@ -21,7 +22,7 @@ class DefaultBookRepository @Inject constructor(
 ) : BookRepository {
     private val shelvedBookList: MutableList<ShelvedBook> = mutableListOf()
 
-    fun loadShelvedBooks(): List<ShelvedBook> {
+   override fun loadShelvedBooks(): List<ShelvedBook> {
         if (shelvedBookList.size == 0) {
             shelvedBookList.add(
                 ShelvedBook(
@@ -83,21 +84,16 @@ class DefaultBookRepository @Inject constructor(
         return shelvedBookList.toList()
     }
 
-    override fun getShelvedBooksByShelf(shelf: Shelf): List<ShelvedBook> {
-
-            if (shelvedBookList.isEmpty())
-                loadShelvedBooks()
-
-           return  shelvedBookList.filter { it.shelf == shelf }
-        }
-
     override fun addBookToShelf(newBook: ShelvedBook){
         shelvedBookList.add(newBook)
     }
 
+    override fun updateBookShelf(book: ShelvedBook) {
+        shelvedBookList.find{ it.isbn == book.isbn }?.let { oldBook -> shelvedBookList[shelvedBookList.indexOf(oldBook)] = book}
+    }
 
-    override fun removeBookFromShelf(idx: Int) {
-        shelvedBookList.removeAt(idx)
+    override fun removeBookFromShelf(book: ShelvedBook) {
+        shelvedBookList.remove(book)
     }
 
     override fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?> =

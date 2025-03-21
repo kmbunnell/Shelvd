@@ -22,6 +22,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.junit.Assert.assertEquals
+import org.mockito.kotlin.whenever
 
 
 class ScanFoundBookVmTest {
@@ -29,10 +30,11 @@ class ScanFoundBookVmTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
     val shelvedBook = Pair(ShelvedBook(listOf("K Bear"), "Best book", isbn = "12345"), false)
+    val dupBook = Pair(ShelvedBook(listOf("K Bear"), "Best book Two", isbn = "6789"), true)
     private val mockScanBookUseCase = mock<ScanBookUseCase>() {
-        on { invoke() }.thenReturn((flow {
+        on { invoke() }.thenReturn(flow {
             emit(shelvedBook)
-        }))
+        })
     }
 
     private val mockIsbnLookUpUseCase = mock<IsbnLookUpUseCase>() {
@@ -41,7 +43,6 @@ class ScanFoundBookVmTest {
         })
     }
     private val shelveBookUseCase = mock<ShelveBookUseCase>()
-    private val mockBookRepo = mock<BookRepository>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -66,7 +67,7 @@ class ScanFoundBookVmTest {
             shelveBookUseCase = shelveBookUseCase
         )
         vm.handleIntent(ScanBookIntent.StartScan)
-        assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook.first,false))
+        assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook.first, false))
     }
 
     @Test
@@ -78,6 +79,21 @@ class ScanFoundBookVmTest {
         )
         vm.handleIntent(ScanBookIntent.LookUp("12345"))
         assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(shelvedBook.first, false))
+    }
+
+    @Test
+    fun `when duplicate is detected, isDup is true`() = runTest(testDispatcher) {
+        whenever(mockIsbnLookUpUseCase.invoke("6789")).thenReturn(flow {
+            emit(dupBook)
+        })
+
+        val vm = ScanBookVm(
+            scanBookUseCase = mockScanBookUseCase,
+            isbnLookUpUseCase = mockIsbnLookUpUseCase,
+            shelveBookUseCase = shelveBookUseCase
+        )
+        vm.handleIntent(ScanBookIntent.LookUp("6789"))
+        assertEquals(vm.state.value, ScanBookViewState.BookScanSuccess(dupBook.first, true))
     }
 
 }
