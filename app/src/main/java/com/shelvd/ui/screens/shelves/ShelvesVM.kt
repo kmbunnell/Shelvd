@@ -3,7 +3,10 @@ package com.shelvd.ui.screens.shelves
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shelvd.data.model.Shelf
-import com.shelvd.data.repo.BookRepository
+import com.shelvd.data.model.ShelvedBook
+import com.shelvd.domain.DeleteBookUseCase
+import com.shelvd.domain.GetBooksByShelfUseCase
+import com.shelvd.domain.ReShelveBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShelvesVM @Inject constructor(
-    val bookRepository: BookRepository
+    private val booksByShelfUseCase: GetBooksByShelfUseCase,
+    private val reshelveBookUseCase: ReShelveBookUseCase,
+    private val deleteBookUseCase: DeleteBookUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<ShelvesViewState>(ShelvesViewState.Loading)
     val state: StateFlow<ShelvesViewState> = _state
@@ -27,8 +32,10 @@ class ShelvesVM @Inject constructor(
                 loadBooks(intent.shelf)
             }
 
-            is ShelvesIntent.DeleteBook -> TODO()
-            is ShelvesIntent.ReshelveBook -> TODO()
+            is ShelvesIntent.DeleteBook -> deleteBook(intent.book)
+            is ShelvesIntent.ReshelveBook -> {
+                reShelve(intent.book, intent.newShelf)
+            }
         }
     }
 
@@ -36,10 +43,27 @@ class ShelvesVM @Inject constructor(
         _state.value = ShelvesViewState.Loading
         viewModelScope.launch {
             _state.value = try {
-                ShelvesViewState.ShelvedBooks(bookRepository.getShelvedBooksByShelf(shelf))
+                ShelvesViewState.ShelvedBooks(shelf, booksByShelfUseCase.invoke(shelf))
             } catch (e: Exception) {
                 ShelvesViewState.Error("Wrong")
             }
         }
     }
+
+    private fun reShelve(book: ShelvedBook, shelf: Shelf) {
+        reshelveBookUseCase.invoke(book, shelf)
+        reloadShelf()
+    }
+
+    private fun deleteBook(book: ShelvedBook) {
+        deleteBookUseCase.invoke(book)
+        reloadShelf()
+    }
+
+    private fun reloadShelf() {
+        
+        // refactor to stay on currently selected shelf
+        handleIntent(ShelvesIntent.LoadBooks(Shelf.OWNED))
+    }
+
 }

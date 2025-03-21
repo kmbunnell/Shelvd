@@ -16,11 +16,12 @@ class IsbnLookUpUseCase @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     operator fun invoke(isbn: String): Flow<Pair<ShelvedBook?, Boolean>> =
-        bookRepository.lookUpBookByISBN(isbn).map { newBook->
+        bookRepository.lookUpBookByISBN(isbn).map { newBook ->
             checkForDuplicate(newBook)
         }.flowOn(dispatcher)
 
-    private fun checkForDuplicate(newBook:ShelvedBook?):Pair<ShelvedBook?, Boolean> =
-       newBook?.let { bookRepository.checkForDuplicate(it)?.let { dup -> Pair( dup, true) } }?:Pair(newBook, false)
+    private fun checkForDuplicate(newBook: ShelvedBook?): Pair<ShelvedBook?, Boolean> =
+        newBook?.let { bookRepository.checkForDuplicate(it)?.let { dup -> Pair(dup, true) } }
+            ?: Pair(newBook, false)
 
 }

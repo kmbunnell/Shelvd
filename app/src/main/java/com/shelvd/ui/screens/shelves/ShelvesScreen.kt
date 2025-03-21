@@ -40,6 +40,8 @@ fun ShelvesRoute(viewModel: ShelvesVM = hiltViewModel()) {
 @Composable
 fun ShelvesScreen(state: ShelvesViewState, onAction: (ShelvesIntent) -> Unit) {
     Column {
+
+        //use state to set current tab for shelf updates
         ShelfRow(onAction)
 
         when (state) {

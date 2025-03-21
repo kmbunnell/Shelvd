@@ -25,7 +25,7 @@ class ScanBookVm @Inject constructor(
 
     fun handleIntent(intent: ScanBookIntent) {
         when (intent) {
-             ScanBookIntent.StartScan -> {
+            ScanBookIntent.StartScan -> {
                 scan()
             }
 
@@ -37,7 +37,11 @@ class ScanBookVm @Inject constructor(
                 shelveBook(intent.book.copy(shelf = intent.shelf))
             }
 
-            ScanBookIntent.ResetScreen->{ reset() }
+            ScanBookIntent.ResetScreen -> {
+                reset()
+            }
+
+            else -> {}
         }
     }
 
@@ -58,25 +62,23 @@ class ScanBookVm @Inject constructor(
         }
     }
 
-    private fun bookLookUpResult(lookUpResult:Pair<ShelvedBook?, Boolean>) {
-        lookUpResult.first?.let { book->
+    private fun bookLookUpResult(lookUpResult: Pair<ShelvedBook?, Boolean>) {
+        lookUpResult.first?.let { book ->
             _state.value = ScanBookViewState.BookScanSuccess(book, lookUpResult.second)
 
-        }?:setErrorState()
+        } ?: setErrorState()
     }
 
-    private fun setErrorState()
-    {
+    private fun setErrorState() {
         _state.value = ScanBookViewState.BookScanError("Look up failed")
     }
 
     private fun shelveBook(book: ShelvedBook) {
-       shelveBookUseCase.invoke(book)
+        shelveBookUseCase.invoke(book)
         reset()
     }
 
-    private fun reset()
-    {
+    private fun reset() {
         _state.value = ScanBookViewState.AwaitScan
     }
 }

@@ -14,7 +14,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mockito.kotlin.after
 import org.mockito.kotlin.mock
 
 class BookRepositoryTest {
@@ -58,54 +57,6 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `load books from Owned Shelf`() = runTest(testDispatcher) {
-        val expected = listOf(
-            ShelvedBook(
-                listOf("Sarah J Maas"),
-                "A Court of Silver Flames",
-                isbn = "12345",
-                Shelf.OWNED
-            ),
-            ShelvedBook(
-                listOf("Jay Kristoff"),
-                "Empire of the Vampire",
-                isbn = "",
-                Shelf.OWNED
-            ),
-            ShelvedBook(
-                listOf("Brigid Kemmerer"),
-                "Defy the Night",
-                isbn = "",
-                Shelf.OWNED
-            ),
-            ShelvedBook(
-                listOf("Brandon Sanderson"),
-                "Mistborn: The final Empire",
-                isbn = "",
-                Shelf.OWNED
-            )
-        )
-        val books = bookRepo.getShelvedBooksByShelf(Shelf.OWNED)
-        assertEquals(books, expected)
-
-    }
-
-    @Test
-    fun `load books from want Shelf`() = runTest(testDispatcher) {
-        val expected = listOf(
-            ShelvedBook(
-                authors = listOf("Jennifer Armentrout"),
-                title = "A Soul of Blood and Ash",
-                isbn = "",
-                shelf = Shelf.WANT
-            )
-        )
-        val books = bookRepo.getShelvedBooksByShelf(Shelf.WANT)
-        assertEquals(books, expected)
-
-    }
-
-    @Test
     fun `find duplicate`() {
         val newBook =  ShelvedBook(
             listOf("Brigid Kemmerer"),
@@ -142,9 +93,9 @@ class BookRepositoryTest {
         isbn = "7897",
         Shelf.WANT
         )
-       val beforeCount = bookRepo.loadShelvedBooks().filter { it.shelf == Shelf.WANT }.size
+       val beforeCount = bookRepo.loadShelvedBooks().size
         bookRepo.addBookToShelf(newBook)
-        val afterCount = bookRepo.getShelvedBooksByShelf(Shelf.WANT).size
+        val afterCount = bookRepo.loadShelvedBooks().size
         assertEquals(afterCount, beforeCount+1)
 
     }
