@@ -28,7 +28,7 @@ class DefaultBookRepository @Inject constructor(
                 ShelvedBook(
                     listOf("Sarah J Maas"),
                     "A Court of Silver Flames",
-                    isbn = "12345",
+                    isbn = "1111",
                     Shelf.OWNED
                 )
             )
@@ -36,7 +36,7 @@ class DefaultBookRepository @Inject constructor(
                 ShelvedBook(
                     listOf("Jay Kristoff"),
                     "Empire of the Vampire",
-                    isbn = "",
+                    isbn = "2222",
                     Shelf.OWNED
                 )
             )
@@ -44,7 +44,7 @@ class DefaultBookRepository @Inject constructor(
                 ShelvedBook(
                     listOf("Brigid Kemmerer"),
                     "Defy the Night",
-                    isbn = "",
+                    isbn = "3333",
                     Shelf.OWNED
                 )
             )
@@ -52,7 +52,7 @@ class DefaultBookRepository @Inject constructor(
                 ShelvedBook(
                     listOf("Brandon Sanderson"),
                     "Mistborn: The final Empire",
-                    isbn = "",
+                    isbn = "4444",
                     Shelf.OWNED
                 )
             )
@@ -60,7 +60,7 @@ class DefaultBookRepository @Inject constructor(
                 ShelvedBook(
                     listOf("Brigid Kemmerer"),
                     "Carving Shadows Into Gold",
-                    isbn = "7894",
+                    isbn = "5555",
                     Shelf.PREORDERED
                 )
             )
@@ -68,7 +68,7 @@ class DefaultBookRepository @Inject constructor(
                 ShelvedBook(
                     listOf("Brynne Weaver"),
                     "Scythe and Sparrow",
-                    isbn = "",
+                    isbn = "6666",
                     Shelf.PREORDERED
                 )
             )
@@ -76,7 +76,7 @@ class DefaultBookRepository @Inject constructor(
                 ShelvedBook(
                     listOf("Jennifer Armentrout"),
                     "A Soul of Blood and Ash",
-                    isbn = "",
+                    isbn = "7777",
                     Shelf.WANT
                 )
             )

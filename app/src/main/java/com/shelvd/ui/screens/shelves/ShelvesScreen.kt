@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,22 +32,40 @@ import com.shelvd.ui.screens.common.ShelfDropDownRow
 import kotlin.math.exp
 
 
+@Preview(showBackground = true)
+@Composable
+fun ShelvesLoadedScreenPreview()
+{
+    val shelvedBooks = listOf(
+        ShelvedBook(authors = listOf("Kristina B"), title = "Best enemies to lovers", isbn = "1234",
+        shelf = Shelf.OWNED),
+        ShelvedBook(authors = listOf("Kristina B", "Bailey B"), title = "Super fun RomCom", isbn = "4567",
+            shelf = Shelf.OWNED),
+        ShelvedBook(authors = listOf("Kristina B"), title = "Next Book ", isbn = "7894",
+            shelf = Shelf.PREORDERED))
+
+    ShelvesScreen(state = ShelvesViewState.ShelvedBooks(currentShelf = Shelf.OWNED, shelvedBooks = shelvedBooks)){}
+}
+
 @Composable
 fun ShelvesRoute(viewModel: ShelvesVM = hiltViewModel()) {
     val currentState by viewModel.state.collectAsStateWithLifecycle()
-    ShelvesScreen(currentState, viewModel::handleIntent)
 
+    LaunchedEffect(viewModel) {
+        viewModel.handleIntent(ShelvesIntent.LoadBooks(Shelf.OWNED))
+    }
+
+    ShelvesScreen(currentState, viewModel::handleIntent)
 }
 
 @Composable
 fun ShelvesScreen(state: ShelvesViewState, onAction: (ShelvesIntent) -> Unit) {
     Column {
 
-        //use state to set current tab for shelf updates
-        ShelfRow(onAction)
-
+        HorizontalDivider(color = Color.Blue, thickness = 1.dp, modifier = Modifier.padding(bottom = 3.dp))
         when (state) {
             is ShelvesViewState.ShelvedBooks -> {
+                ShelfRow(state.currentShelf, onAction)
                 BookShelf(
                     state.shelvedBooks,
                     onDeleteBook = {
@@ -74,8 +94,8 @@ fun BookShelf(
     onDeleteBook: (ShelvedBook) -> Unit,
     onReshelveBook: (ShelvedBook, Shelf) -> Unit
 ) {
-    var selectedIdx by remember {
-        mutableIntStateOf(-1)
+    var selectedIsbn by remember {
+        mutableStateOf("")
     }
 
     LazyColumn(
@@ -88,12 +108,11 @@ fun BookShelf(
 
             BookShelfItem(
                 book = book,
-                showEditOptions = (selectedIdx == idx),
-                onSelected = { selectedIdx = if (selectedIdx == idx) -1 else idx },
+                showEditOptions = (selectedIsbn == book.isbn),
+                onSelected = { selectedIsbn = if (selectedIsbn == book.isbn) "" else book.isbn },
                 onReshelveBook = onReshelveBook,
                 onRemove = onDeleteBook
             )
-
         }
     }
 }
@@ -106,8 +125,7 @@ fun BookShelfItem(
     onReshelveBook: (ShelvedBook, Shelf) -> Unit,
     onRemove: (ShelvedBook) -> Unit
 ) {
-    var selectedShelf by remember { mutableStateOf(book.shelf) }
-
+    var bookCurrentShelf by remember { mutableStateOf(book.shelf) }
 
     Text(
         modifier = Modifier
@@ -125,9 +143,9 @@ fun BookShelfItem(
         Column(modifier = Modifier.padding(start = 10.dp), horizontalAlignment = Alignment.Start) {
             HorizontalDivider(color = Color.Blue, thickness = 1.dp)
             ShelfDropDownRow(
-                selectedShelf = selectedShelf,
-                onShelfSelection = { selectedShelf = it },
-                onShelveButtonClick = { onReshelveBook(book, selectedShelf) }
+                selectedShelf = bookCurrentShelf,
+                onShelfSelection = { bookCurrentShelf = it },
+                onShelveButtonClick = { onReshelveBook(book, bookCurrentShelf) }
             )
             Button( onClick = { onRemove(book) }) {
                 Text(
@@ -140,26 +158,26 @@ fun BookShelfItem(
 
 
 @Composable
-fun ShelfRow(onAction: (ShelvesIntent) -> Unit) {
-    var selectedIndex by remember {
-        mutableIntStateOf(0)
+fun ShelfRow(currentShelf: Shelf, onAction: (ShelvesIntent) -> Unit) {
+    var selectedShelf by remember {
+        mutableStateOf(currentShelf)
     }
 
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
         LazyRow {
-            items(Shelf.entries.size) { idx ->
+            items(Shelf.entries.size) {  idx->
                 Text(
                     text = Shelf.entries[idx].name,
                     modifier = Modifier
                         .padding(horizontal = 5.dp)
                         .selectable(
-                            selected = selectedIndex == idx,
+                            selected = selectedShelf == Shelf.entries[idx],
                             onClick = {
-                                selectedIndex = idx
+                                selectedShelf = Shelf.entries[idx]
                                 onAction(ShelvesIntent.LoadBooks(Shelf.entries[idx]))
                             })
                         .background(
-                            if (selectedIndex == idx) Color.Gray
+                            if (selectedShelf == Shelf.entries[idx]) Color.Gray
                             else Color.Transparent
                         )
                 )
