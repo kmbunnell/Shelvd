@@ -7,6 +7,7 @@ import com.shelvd.domain.DeleteBookUseCase
 import com.shelvd.domain.GetBooksByShelfUseCase
 import com.shelvd.domain.ReShelveBookUseCase
 import com.shelvd.domain.ShelveBookUseCase
+import com.shelvd.ui.screens.shelves.ShelvesIntent
 import com.shelvd.ui.screens.shelves.ShelvesVM
 import com.shelvd.ui.screens.shelves.ShelvesViewState
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 import org.mockito.kotlin.whenever
 
@@ -32,9 +34,9 @@ class ShelvesVMTest {
         ShelvedBook(listOf("K Bear"), "Hot Vampires", "isbn", Shelf.OWNED)
     )
 
-    private val booksByShelfUseCase = mock<GetBooksByShelfUseCase>()
-    private val reShelveBookUseCase = mock<ReShelveBookUseCase>()
-    private val deleteBookUseCase = mock<DeleteBookUseCase>()
+    private val booksByShelfUseCaseMock = mock<GetBooksByShelfUseCase>()
+    private val reShelveBookUseCaseMock = mock<ReShelveBookUseCase>()
+    private val deleteBookUseCaseMock = mock<DeleteBookUseCase>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -51,12 +53,13 @@ class ShelvesVMTest {
 
     @Test
     fun `load owned books`() = runTest(testDispatcher) {
-        whenever(booksByShelfUseCase.invoke(Shelf.OWNED)).thenReturn(testOwnedShelvedBooks)
+        whenever(booksByShelfUseCaseMock.invoke(Shelf.OWNED)).thenReturn(testOwnedShelvedBooks)
         val vm = ShelvesVM(
-            booksByShelfUseCase = booksByShelfUseCase,
-            deleteBookUseCase = deleteBookUseCase,
-            reshelveBookUseCase = reShelveBookUseCase
+            booksByShelfUseCase = booksByShelfUseCaseMock,
+            deleteBookUseCase = deleteBookUseCaseMock,
+            reshelveBookUseCase = reShelveBookUseCaseMock
         )
+        vm.handleIntent(ShelvesIntent.LoadBooks(Shelf.OWNED))
         assertEquals(
             vm.state.value,
             ShelvesViewState.ShelvedBooks(
@@ -64,6 +67,34 @@ class ShelvesVMTest {
                 shelvedBooks = testOwnedShelvedBooks
             )
         )
+    }
+
+    @Test
+    fun `Reshelve intent calls reshelve usecase`() = runTest(testDispatcher) {
+        val vm = ShelvesVM(
+            booksByShelfUseCase = booksByShelfUseCaseMock,
+            deleteBookUseCase = deleteBookUseCaseMock,
+            reshelveBookUseCase = reShelveBookUseCaseMock
+        )
+        val currentBook =  ShelvedBook(listOf("K Bear"), "Hot Vampires", "isbn", Shelf.OWNED)
+        val newShelf = Shelf.WANT
+        vm.handleIntent(ShelvesIntent.ReshelveBook(newShelf = newShelf, book = currentBook ))
+        verify(reShelveBookUseCaseMock).invoke(newShelf = newShelf, book = currentBook)
+
+    }
+
+    @Test
+    fun `Delete intent calls delete use case`() = runTest(testDispatcher) {
+
+        val vm = ShelvesVM(
+            booksByShelfUseCase = booksByShelfUseCaseMock,
+            deleteBookUseCase = deleteBookUseCaseMock,
+            reshelveBookUseCase = reShelveBookUseCaseMock
+        )
+        val currentBook =  ShelvedBook(listOf("K Bear"), "Hot Vampires", "isbn", Shelf.OWNED)
+        val newShelf = Shelf.WANT
+        vm.handleIntent(ShelvesIntent.ReshelveBook(newShelf = newShelf, book = currentBook ))
+        verify(reShelveBookUseCaseMock).invoke(newShelf = newShelf, book = currentBook)
 
     }
 }
