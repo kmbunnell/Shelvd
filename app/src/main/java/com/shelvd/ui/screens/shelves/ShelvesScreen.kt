@@ -80,7 +80,10 @@ fun ShelvesScreen(state: ShelvesViewState, onAction: (ShelvesIntent) -> Unit) {
         )
         when (state) {
             is ShelvesViewState.ShelvedBooks -> {
-                ShelfRow(state.currentShelf, onAction)
+                ShelfRow(
+                    state.currentShelf,
+                    onShelfClicked= { onAction(ShelvesIntent.LoadBooks(it) )})
+
                 BookShelf(
                     state.shelvedBooks,
                     onDeleteBook = {
@@ -190,7 +193,7 @@ fun BookShelfItem(
 
 
 @Composable
-fun ShelfRow(currentShelf: Shelf, onAction: (ShelvesIntent) -> Unit) {
+fun ShelfRow(currentShelf: Shelf, onShelfClicked:(Shelf)->Unit) {
     var selectedShelf by remember {
         mutableStateOf(currentShelf)
     }
@@ -205,8 +208,7 @@ fun ShelfRow(currentShelf: Shelf, onAction: (ShelvesIntent) -> Unit) {
                         .selectable(
                             selected = selectedShelf == Shelf.entries[idx],
                             onClick = {
-                                selectedShelf = Shelf.entries[idx]
-                                onAction(ShelvesIntent.LoadBooks(Shelf.entries[idx]))
+                                onShelfClicked(Shelf.entries[idx])
                             })
                         .background(
                             if (selectedShelf == Shelf.entries[idx]) Color.Gray
@@ -217,7 +219,3 @@ fun ShelfRow(currentShelf: Shelf, onAction: (ShelvesIntent) -> Unit) {
         }
     }
 }
-
-
-
-
