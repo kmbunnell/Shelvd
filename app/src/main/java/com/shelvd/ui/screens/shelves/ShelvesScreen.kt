@@ -208,6 +208,7 @@ fun ShelfRow(currentShelf: Shelf, onShelfClicked:(Shelf)->Unit) {
                         .selectable(
                             selected = selectedShelf == Shelf.entries[idx],
                             onClick = {
+                                selectedShelf= Shelf.entries[idx]
                                 onShelfClicked(Shelf.entries[idx])
                             })
                         .background(
