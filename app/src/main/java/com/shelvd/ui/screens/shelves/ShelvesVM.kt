@@ -22,16 +22,11 @@ class ShelvesVM @Inject constructor(
     private val _state = MutableStateFlow<ShelvesViewState>(ShelvesViewState.Loading)
     val state: StateFlow<ShelvesViewState> = _state
 
-    init {
-        handleIntent(ShelvesIntent.LoadBooks(Shelf.OWNED))
-    }
-
     fun handleIntent(intent: ShelvesIntent) {
         when (intent) {
             is ShelvesIntent.LoadBooks -> {
                 loadBooks(intent.shelf)
             }
-
             is ShelvesIntent.DeleteBook -> deleteBook(intent.book)
             is ShelvesIntent.ReshelveBook -> {
                 reShelve(intent.book, intent.newShelf)
@@ -61,9 +56,13 @@ class ShelvesVM @Inject constructor(
     }
 
     private fun reloadShelf() {
-        
-        // refactor to stay on currently selected shelf
-        handleIntent(ShelvesIntent.LoadBooks(Shelf.OWNED))
+        loadBooks(getCurrentShelf())
     }
 
+    private fun getCurrentShelf() =
+      when(val currentState =_state.value)
+       {
+          is ShelvesViewState.ShelvedBooks->{currentState.currentShelf}
+          else->Shelf.OWNED
+       }
 }
