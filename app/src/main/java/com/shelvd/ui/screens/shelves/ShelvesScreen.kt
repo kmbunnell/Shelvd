@@ -34,17 +34,28 @@ import kotlin.math.exp
 
 @Preview(showBackground = true)
 @Composable
-fun ShelvesLoadedScreenPreview()
-{
+fun ShelvesLoadedScreenPreview() {
     val shelvedBooks = listOf(
-        ShelvedBook(authors = listOf("Kristina B"), title = "Best enemies to lovers", isbn = "1234",
-        shelf = Shelf.OWNED),
-        ShelvedBook(authors = listOf("Kristina B", "Bailey B"), title = "Super fun RomCom", isbn = "4567",
-            shelf = Shelf.OWNED),
-        ShelvedBook(authors = listOf("Kristina B"), title = "Next Book ", isbn = "7894",
-            shelf = Shelf.PREORDERED))
+        ShelvedBook(
+            authors = listOf("Kristina B"), title = "Best enemies to lovers", isbn = "1234",
+            shelf = Shelf.OWNED
+        ),
+        ShelvedBook(
+            authors = listOf("Kristina B", "Bailey B"), title = "Super fun RomCom", isbn = "4567",
+            shelf = Shelf.OWNED
+        ),
+        ShelvedBook(
+            authors = listOf("Kristina B"), title = "Next Book ", isbn = "7894",
+            shelf = Shelf.PREORDERED
+        )
+    )
 
-    ShelvesScreen(state = ShelvesViewState.ShelvedBooks(currentShelf = Shelf.OWNED, shelvedBooks = shelvedBooks)){}
+    ShelvesScreen(
+        state = ShelvesViewState.ShelvedBooks(
+            currentShelf = Shelf.OWNED,
+            shelvedBooks = shelvedBooks
+        )
+    ) {}
 }
 
 @Composable
@@ -62,7 +73,11 @@ fun ShelvesRoute(viewModel: ShelvesVM = hiltViewModel()) {
 fun ShelvesScreen(state: ShelvesViewState, onAction: (ShelvesIntent) -> Unit) {
     Column {
 
-        HorizontalDivider(color = Color.Blue, thickness = 1.dp, modifier = Modifier.padding(bottom = 3.dp))
+        HorizontalDivider(
+            color = Color.Blue,
+            thickness = 1.dp,
+            modifier = Modifier.padding(bottom = 3.dp)
+        )
         when (state) {
             is ShelvesViewState.ShelvedBooks -> {
                 ShelfRow(state.currentShelf, onAction)
@@ -77,15 +92,20 @@ fun ShelvesScreen(state: ShelvesViewState, onAction: (ShelvesIntent) -> Unit) {
                 )
             }
 
-            is ShelvesViewState.Error -> TODO()
-            ShelvesViewState.Loading -> Loading()
+            is ShelvesViewState.Error -> ErroredScreen()
+            ShelvesViewState.Loading -> LoadingScreen()
         }
     }
 }
 
 @Composable
-fun Loading() {
+fun LoadingScreen() {
     Text("Loading")
+}
+
+@Composable
+fun ErroredScreen() {
+    Text("Error")
 }
 
 @Composable
@@ -109,6 +129,7 @@ fun BookShelf(
             BookShelfItem(
                 book = book,
                 showEditOptions = (selectedIsbn == book.isbn),
+                onClearSelection = { selectedIsbn = "" },
                 onSelected = { selectedIsbn = if (selectedIsbn == book.isbn) "" else book.isbn },
                 onReshelveBook = onReshelveBook,
                 onRemove = onDeleteBook
@@ -122,6 +143,7 @@ fun BookShelfItem(
     book: ShelvedBook,
     showEditOptions: Boolean,
     onSelected: () -> Unit,
+    onClearSelection: () -> Unit,
     onReshelveBook: (ShelvedBook, Shelf) -> Unit,
     onRemove: (ShelvedBook) -> Unit
 ) {
@@ -134,25 +156,35 @@ fun BookShelfItem(
             .background(
                 if (showEditOptions) Color.Blue
                 else Color.Transparent
-            ) ,
+            ),
         text = book.title
     )
 
     if (showEditOptions)
-
         Column(modifier = Modifier.padding(start = 10.dp), horizontalAlignment = Alignment.Start) {
             HorizontalDivider(color = Color.Blue, thickness = 1.dp)
             ShelfDropDownRow(
                 selectedShelf = bookCurrentShelf,
                 onShelfSelection = { bookCurrentShelf = it },
-                onShelveButtonClick = { onReshelveBook(book, bookCurrentShelf) }
+                onShelveButtonClick = {
+                    onClearSelection()
+                    onReshelveBook(book, bookCurrentShelf)
+                }
             )
-            Button( onClick = { onRemove(book) }) {
+            Button(onClick = {
+                onClearSelection()
+                onRemove(book)
+            }) {
                 Text(
                     "Delete"
                 )
             }
-            HorizontalDivider(color = Color.Blue, thickness = 1.dp, modifier = Modifier.padding(bottom = 3.dp))
+
+            HorizontalDivider(
+                color = Color.Blue,
+                thickness = 1.dp,
+                modifier = Modifier.padding(bottom = 3.dp)
+            )
         }
 }
 
@@ -165,7 +197,7 @@ fun ShelfRow(currentShelf: Shelf, onAction: (ShelvesIntent) -> Unit) {
 
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
         LazyRow {
-            items(Shelf.entries.size) {  idx->
+            items(Shelf.entries.size) { idx ->
                 Text(
                     text = Shelf.entries[idx].name,
                     modifier = Modifier
