@@ -67,6 +67,7 @@ dependencies {
     implementation (libs.ktor.client.logging)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.room.runtime)
     ksp(libs.hilt.android.compiler)
     testImplementation(libs.junit)
     testImplementation (libs.jetbrains.kotlinx.coroutines.test)
