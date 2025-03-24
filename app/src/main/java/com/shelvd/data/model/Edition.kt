@@ -5,6 +5,6 @@ enum class Edition(val screenName:String, val bit:Int) {
     PAPERBACK ("Paperback", 1 shl 1), //2: 000010
     FIRST ("First Edition", 1 shl 2), //4: 000100
     ARC ("Arc", 1 shl 3), //8: 001000
-    SPECIAL("Special/Collectors", 1 shl 4), //16: 010000
+    SPECIAL("Special", 1 shl 4), //16: 010000
     SIGNED ("Signed", 1 shl 5), //32: 100000
 }

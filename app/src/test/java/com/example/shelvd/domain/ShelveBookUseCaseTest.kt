@@ -1,5 +1,6 @@
 package com.example.shelvd.domain
 
+import com.shelvd.data.model.Edition
 import com.shelvd.data.model.Shelf
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.repo.BookRepository
@@ -10,7 +11,7 @@ import org.mockito.kotlin.verify
 
 class ShelveBookUseCaseTest {
 
-    val bookRepository = mock<BookRepository>() {
+    val bookRepository =  mock<BookRepository>() {
         on { loadShelvedBooks() }.thenReturn(
             listOf(
                 ShelvedBook(
@@ -22,7 +23,7 @@ class ShelveBookUseCaseTest {
     }
 
     @Test
-    fun `book lookup success`() {
+    fun `book add to shelf success`() {
         val newBook = ShelvedBook(
             listOf("K bear"),
             "Amazing Book  ",
@@ -30,7 +31,11 @@ class ShelveBookUseCaseTest {
             Shelf.WANT
         )
         val usecase = ShelveBookUseCase(bookRepository)
-        usecase.invoke(newBook)
+        usecase.invoke(
+            newBook = newBook,
+            newShelf = Shelf.WANT
+        )
         verify(bookRepository).addBookToShelf(newBook)
+
     }
 }
