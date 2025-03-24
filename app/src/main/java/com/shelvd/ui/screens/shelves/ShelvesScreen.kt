@@ -166,14 +166,14 @@ fun BookShelfItem(
     if (showEditOptions)
         Column(modifier = Modifier.padding(start = 10.dp), horizontalAlignment = Alignment.Start) {
             HorizontalDivider(color = Color.Blue, thickness = 1.dp)
-            ShelfDropDownRow(
+           /* ShelfDropDownRow(
                 selectedShelf = bookCurrentShelf,
                 onShelfSelection = { bookCurrentShelf = it },
                 onShelveButtonClick = {
                     onClearSelection()
                     onReshelveBook(book, bookCurrentShelf)
                 }
-            )
+            )*/
             Button(onClick = {
                 onClearSelection()
                 onRemove(book)
