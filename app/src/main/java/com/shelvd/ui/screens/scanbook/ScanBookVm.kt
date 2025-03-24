@@ -2,8 +2,9 @@ package com.shelvd.ui.screens.scanBook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shelvd.data.model.Edition
+import com.shelvd.data.model.Shelf
 import com.shelvd.data.model.ShelvedBook
-import com.shelvd.data.repo.BookRepository
 import com.shelvd.domain.IsbnLookUpUseCase
 import com.shelvd.domain.ScanBookUseCase
 import com.shelvd.domain.ShelveBookUseCase
@@ -34,7 +35,7 @@ class ScanBookVm @Inject constructor(
             }
 
             is ScanBookIntent.ShelveBook -> {
-                shelveBook(intent.book.copy(shelf = intent.shelf))
+                shelveBook(intent.book, intent.shelf, intent.editionFlags)
             }
 
             ScanBookIntent.ResetScreen -> {
@@ -73,8 +74,9 @@ class ScanBookVm @Inject constructor(
         _state.value = ScanBookViewState.BookScanError("Look up failed")
     }
 
-    private fun shelveBook(book: ShelvedBook) {
-        shelveBookUseCase.invoke(book)
+    private fun shelveBook(book: ShelvedBook, shelf: Shelf, editionFlags: List<Edition>) {
+
+        shelveBookUseCase.invoke(book, shelf, editionFlags)
         reset()
     }
 

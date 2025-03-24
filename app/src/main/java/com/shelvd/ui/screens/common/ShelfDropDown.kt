@@ -24,21 +24,25 @@ import com.example.shelvd.R
 import com.shelvd.data.model.Shelf
 
 @Composable
-fun ShelfDropDownRow(selectedShelf: Shelf, onShelfSelection: (Shelf) -> Unit, onShelveButtonClick: ()->Unit)
-{
-    Row(verticalAlignment = Alignment.CenterVertically){
+fun ShelfDropDownRow(selectedShelf: Shelf, onShelfSelection: (Shelf) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             modifier = Modifier.padding(end = 10.dp),
             text = stringResource(R.string.shelveOn),
         )
         ShelfDropDown(selectedShelf, onShelfSelection)
-        Button(
-            onClick = onShelveButtonClick
-        ) {
-            Text(text = stringResource(R.string.shelve))
-        }
     }
 }
+
+@Composable
+fun ShelveButton(onShelveButtonClick: () -> Unit) {
+    Button(
+        onClick = onShelveButtonClick
+    ) {
+        Text(text = stringResource(R.string.shelve))
+    }
+}
+
 @Composable
 fun ShelfDropDown(selectedShelf: Shelf, onShelfSelection: (Shelf) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
