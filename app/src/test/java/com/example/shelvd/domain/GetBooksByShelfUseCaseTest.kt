@@ -1,6 +1,8 @@
 package com.example.shelvd.domain
 
+import com.shelvd.data.Util
 import com.shelvd.data.api.ApiService
+import com.shelvd.data.model.Edition
 import com.shelvd.data.model.Shelf
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.repo.DefaultBookRepository
@@ -26,28 +28,39 @@ class GetBooksByShelfUseCaseTest {
             ShelvedBook(
                 listOf("Sarah J Maas"),
                 "A Court of Silver Flames",
-                isbn = "12345",
-                Shelf.OWNED
+                isbn = "1111",
+                Shelf.OWNED,
+                Util.calculateEditionFlags(listOf(Edition.ARC)),
+                "I wish"
             ),
             ShelvedBook(
                 listOf("Jay Kristoff"),
                 "Empire of the Vampire",
-                isbn = "",
-                Shelf.OWNED
+                isbn = "2222",
+                Shelf.OWNED,
+                Util.calculateEditionFlags(listOf(Edition.SPECIAL, Edition.SIGNED)),
+                ""
             ),
+
             ShelvedBook(
                 listOf("Brigid Kemmerer"),
                 "Defy the Night",
-                isbn = "",
-                Shelf.OWNED
+                isbn = "3333",
+                Shelf.OWNED,
+                Util.calculateEditionFlags(listOf(Edition.HARDBACK)),
+                ""
             ),
+
             ShelvedBook(
                 listOf("Brandon Sanderson"),
                 "Mistborn: The final Empire",
-                isbn = "",
-                Shelf.OWNED
+                isbn = "4444",
+                Shelf.OWNED,
+                Util.calculateEditionFlags(listOf(Edition.SPECIAL)),
+                "Anniversary Edition"
             )
         )
+
         val books = usecase.invoke(Shelf.OWNED)
         assertEquals(books, expected)
     }
@@ -58,7 +71,7 @@ class GetBooksByShelfUseCaseTest {
             ShelvedBook(
                 authors = listOf("Jennifer Armentrout"),
                 title = "A Soul of Blood and Ash",
-                isbn = "",
+                isbn = "7777",
                 shelf = Shelf.WANT
             )
         )

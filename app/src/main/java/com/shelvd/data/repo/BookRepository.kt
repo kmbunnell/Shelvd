@@ -1,5 +1,6 @@
 package com.shelvd.data.repo
 
+import com.shelvd.data.Util
 import com.shelvd.data.api.ApiService
 import com.shelvd.data.model.Edition
 import com.shelvd.data.model.ShelvedBook
@@ -63,9 +64,9 @@ class DefaultBookRepository @Inject constructor(
             "A Court of Silver Flames",
             isbn = "1111",
             Shelf.OWNED,
+            Util.calculateEditionFlags(listOf(Edition.ARC)),
+            "I wish"
         )
-        book1.addEditionFlag(Edition.ARC)
-        book1.notes = "I wish"
         shelvedBookList.add(
             book1
         )
@@ -74,10 +75,10 @@ class DefaultBookRepository @Inject constructor(
             listOf("Jay Kristoff"),
             "Empire of the Vampire",
             isbn = "2222",
-            Shelf.OWNED
+            Shelf.OWNED,
+            Util.calculateEditionFlags(listOf(Edition.SPECIAL, Edition.SIGNED)),
+            ""
         )
-        book2.addEditionFlag(Edition.SIGNED)
-        book2.addEditionFlag(Edition.SPECIAL)
         shelvedBookList.add(
             book2
         )
@@ -86,9 +87,10 @@ class DefaultBookRepository @Inject constructor(
             listOf("Brigid Kemmerer"),
             "Defy the Night",
             isbn = "3333",
-            Shelf.OWNED
+            Shelf.OWNED,
+            Util.calculateEditionFlags(listOf(Edition.HARDBACK)),
+            ""
         )
-        book3.addEditionFlag(Edition.HARDBACK)
         shelvedBookList.add(
             book3
         )
@@ -97,10 +99,10 @@ class DefaultBookRepository @Inject constructor(
             listOf("Brandon Sanderson"),
             "Mistborn: The final Empire",
             isbn = "4444",
-            Shelf.OWNED
+            Shelf.OWNED,
+            Util.calculateEditionFlags(listOf(Edition.SPECIAL)),
+            "Anniversary Edition"
         )
-        book4.addEditionFlag(Edition.SPECIAL)
-        book4.notes = "Anniversary"
         shelvedBookList.add(
             book4
         )
@@ -109,9 +111,10 @@ class DefaultBookRepository @Inject constructor(
             listOf("Brigid Kemmerer"),
             "Carving Shadows Into Gold",
             isbn = "5555",
-            Shelf.PREORDERED
+            Shelf.PREORDERED,
+            Util.calculateEditionFlags(listOf(Edition.HARDBACK)),
+            "B&N Jan 28"
         )
-        book5.notes = "B&N Jan 28"
         shelvedBookList.add(
             book5
         )
@@ -122,7 +125,6 @@ class DefaultBookRepository @Inject constructor(
             isbn = "6666",
             Shelf.PREORDERED
         )
-
         shelvedBookList.add(
             book6
         )

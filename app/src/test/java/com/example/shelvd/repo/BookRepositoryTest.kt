@@ -1,9 +1,11 @@
 package com.example.shelvd.repo
 
+import com.shelvd.data.Util
 import com.shelvd.data.api.ApiService
 import com.shelvd.data.model.ApiResult
 import com.shelvd.data.model.BookResult
 import com.shelvd.data.model.Doc
+import com.shelvd.data.model.Edition
 import com.shelvd.data.model.Shelf
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.data.repo.DefaultBookRepository
@@ -58,11 +60,13 @@ class BookRepositoryTest {
 
     @Test
     fun `find duplicate`() {
-        val newBook =  ShelvedBook(
-            listOf("Brigid Kemmerer"),
-            "Carving Shadows Into Gold",
-            isbn = "7894",
-            Shelf.PREORDERED
+        val newBook = ShelvedBook(
+            listOf("Jay Kristoff"),
+            "Empire of the Vampire",
+            isbn = "2222",
+            Shelf.OWNED,
+            Util.calculateEditionFlags(listOf(Edition.SPECIAL, Edition.SIGNED)),
+            ""
         )
         bookRepo.loadShelvedBooks()
         val dup = bookRepo.checkForDuplicate(newBook)
@@ -85,7 +89,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `add book()`()
+    fun `add new book()`()
     {
         val newBook =ShelvedBook(
         listOf("K bear"),
@@ -97,6 +101,35 @@ class BookRepositoryTest {
         bookRepo.addBookToShelf(newBook)
         val afterCount = bookRepo.loadShelvedBooks().size
         assertEquals(afterCount, beforeCount+1)
+
+    }
+
+    @Test
+    fun `update shelved book()`()
+    {
+        val flagInt= Util.calculateEditionFlags(listOf(Edition.PAPERBACK))
+        val updateBook =  ShelvedBook(
+        listOf("Brynne Weaver"),
+        "Scythe and Sparrow",
+        isbn = "6666",
+        Shelf.OWNED,
+            flagInt,
+            "some note"
+
+        )
+
+        //look up book in booklist
+        val beforeCount = bookRepo.loadShelvedBooks().size
+        bookRepo.updateBookShelf(updateBook)
+        val afterCount = bookRepo.loadShelvedBooks().size
+
+        assertEquals(afterCount, beforeCount) //book list count remains the same
+
+        //relook up book after update
+        val bookUpdated = bookRepo.loadShelvedBooks().first{it.isbn == "6666"}
+        assertEquals(bookUpdated.shelf, Shelf.OWNED)
+        assertEquals(bookUpdated.editionFlags, flagInt)
+        assertEquals(bookUpdated.notes, "some note")
 
     }
 }
