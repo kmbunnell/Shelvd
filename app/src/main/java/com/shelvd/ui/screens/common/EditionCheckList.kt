@@ -15,21 +15,24 @@ import com.shelvd.data.model.Edition
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun EditionCheckList( editedFlags:MutableList<Edition>, onCheckedChanged:(List<Edition>)->Unit)
-{
+fun EditionCheckList(editedFlags: MutableList<Edition>, onCheckedChanged: (List<Edition>) -> Unit) {
     LazyColumn {
         stickyHeader {
             Text(text = "Edition Info")
         }
 
-        items( Edition.entries.size ){ idx->
+        items(Edition.entries.size) { idx ->
             EditionItemRow(Edition.entries[idx], editedFlags, onCheckedChanged)
         }
     }
 }
 
 @Composable
-fun EditionItemRow(edition: Edition, editedFlags: MutableList<Edition>, onCheckedChanged:(List<Edition>)->Unit ) {
+fun EditionItemRow(
+    edition: Edition,
+    editedFlags: MutableList<Edition>,
+    onCheckedChanged: (List<Edition>) -> Unit
+) {
 
     var isChecked by remember { mutableStateOf(editedFlags.contains(edition)) }
 
@@ -40,8 +43,8 @@ fun EditionItemRow(edition: Edition, editedFlags: MutableList<Edition>, onChecke
         Checkbox(
             checked = isChecked,
             onCheckedChange = {
-                isChecked=it
-                if(editedFlags.contains(edition))
+                isChecked = it
+                if (editedFlags.contains(edition))
                     editedFlags.remove(edition)
                 else
                     editedFlags.add(edition)
@@ -49,8 +52,8 @@ fun EditionItemRow(edition: Edition, editedFlags: MutableList<Edition>, onChecke
                 onCheckedChanged(editedFlags)
             }
         )
-        Text( text = edition.screenName )
 
+        Text(text = edition.screenName)
     }
 }
 

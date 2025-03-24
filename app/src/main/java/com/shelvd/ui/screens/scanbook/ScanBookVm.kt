@@ -76,7 +76,7 @@ class ScanBookVm @Inject constructor(
 
     private fun shelveBook(book: ShelvedBook, shelf: Shelf, editionFlags: List<Edition>) {
 
-        shelveBookUseCase.invoke(book, shelf, editionFlags )
+        shelveBookUseCase.invoke(book, shelf, editionFlags)
         reset()
     }
 

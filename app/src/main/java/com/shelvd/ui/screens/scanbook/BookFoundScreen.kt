@@ -43,14 +43,22 @@ fun BookFoundScreen(book: ShelvedBook, isDup: Boolean, onAction: (ScanBookIntent
         } else {
 
             EditionCheckList(
-                editedFlags = updatedFlagsList ,
-                onCheckedChanged = { flagList = updatedFlagsList})
+                editedFlags = updatedFlagsList,
+                onCheckedChanged = { flagList = updatedFlagsList })
 
             ShelfDropDownRow(
-                selectedShelf= selectedBookShelf,
+                selectedShelf = selectedBookShelf,
                 onShelfSelection = { selectedBookShelf = it })
 
-            ShelveButton{onAction(ScanBookIntent.ShelveBook(book, selectedBookShelf, updatedFlagsList.toList())) }
+            ShelveButton {
+                onAction(
+                    ScanBookIntent.ShelveBook(
+                        book,
+                        selectedBookShelf,
+                        updatedFlagsList.toList()
+                    )
+                )
+            }
 
         }
     }
