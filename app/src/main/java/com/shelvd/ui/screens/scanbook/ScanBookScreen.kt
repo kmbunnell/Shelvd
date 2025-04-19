@@ -70,7 +70,6 @@ fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit)
             HorizontalDivider(color = Color.Blue, thickness = 1.dp)
         }
 
-        Column() {
             when (state) {
                 is ScanBookViewState.BookScanSuccess -> {
                     BookFoundScreen(state.book, state.isDup, onAction = onAction)
@@ -91,7 +90,6 @@ fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit)
                 else -> {}
             }
         }
-    }
 
 }
 
