@@ -1,11 +1,15 @@
 package com.shelvd.ui.screens.scanBook
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -66,16 +70,26 @@ fun ScanBookScreen(state: ScanBookViewState, onAction: (ScanBookIntent) -> Unit)
             HorizontalDivider(color = Color.Blue, thickness = 1.dp)
         }
 
-        when (state) {
-            is ScanBookViewState.BookScanSuccess -> {
-                BookFoundScreen(state.book, state.isDup,  onAction = onAction)
-            }
+        Column() {
+            when (state) {
+                is ScanBookViewState.BookScanSuccess -> {
+                    BookFoundScreen(state.book, state.isDup, onAction = onAction)
+                }
 
-            is ScanBookViewState.BookScanError -> {
-                BookNotFound()
-            }
+                is ScanBookViewState.BookScanError -> {
+                    BookNotFound()
+                }
 
-            else -> {}
+                is ScanBookViewState.Scanning -> {
+                       CircularProgressIndicator(
+                           modifier = Modifier.width(64.dp),
+                           color = MaterialTheme.colorScheme.secondary,
+                           trackColor = MaterialTheme.colorScheme.surfaceVariant
+                       )
+                }
+
+                else -> {}
+            }
         }
     }
 

@@ -18,7 +18,7 @@ import javax.inject.Inject
 class ScanBookVm @Inject constructor(
     private val scanBookUseCase: ScanBookUseCase,
     private val isbnLookUpUseCase: IsbnLookUpUseCase,
-    private val shelveBookUseCase: ShelveBookUseCase
+    private val shelveBookUseCase: ShelveBookUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ScanBookViewState>(ScanBookViewState.AwaitScan)
@@ -47,6 +47,7 @@ class ScanBookVm @Inject constructor(
     }
 
     private fun scan() {
+        _state.value = ScanBookViewState.Scanning
         viewModelScope.launch {
             scanBookUseCase.invoke().collect { result ->
                 bookLookUpResult(result)
@@ -56,7 +57,8 @@ class ScanBookVm @Inject constructor(
     }
 
     private fun lookUp(isbn: String) {
-        viewModelScope.launch {
+        _state.value = ScanBookViewState.Scanning
+        viewModelScope.launch{
             isbnLookUpUseCase.invoke(isbn).collect { result ->
                 bookLookUpResult(result)
             }
