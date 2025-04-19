@@ -14,7 +14,7 @@ interface BookRepository {
     fun addBookToShelf(newBook: ShelvedBook)
     fun checkForDuplicate(newBook: ShelvedBook): ShelvedBook?
     fun removeBookFromShelf(book: ShelvedBook)
-    fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?>
+    suspend fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?>
     fun loadShelvedBooks(): List<ShelvedBook>
     fun updateBookShelf(book: ShelvedBook)
 }
@@ -44,7 +44,7 @@ class DefaultBookRepository @Inject constructor(
         shelvedBookList.remove(book)
     }
 
-    override fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?> =
+    override suspend fun lookUpBookByISBN(isbn: String): Flow<ShelvedBook?> =
         apiService.getBookByIsbn(isbn).map {
             it.data?.let { book ->
                 return@map ShelvedBook(
