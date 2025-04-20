@@ -17,7 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
-import com.example.shelvd.R
+import com.ladykbear.shelvd.R
 import com.shelvd.ui.navigation.BottomNav
 import com.shelvd.ui.navigation.BottomNavRoutes
 import com.shelvd.ui.theme.ShelvdTheme

@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.shelvd"
+    namespace = "com.ladykbear.shelvd"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.shelvd"
+        applicationId = "com.ladykbear.shelvd"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
