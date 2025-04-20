@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.shelvd.R
+import com.ladykbear.shelvd.R
 import com.shelvd.data.model.ShelvedBook
 import com.shelvd.ui.screens.common.EditionCheckList
 import com.shelvd.ui.screens.common.ShelfDropDownRow

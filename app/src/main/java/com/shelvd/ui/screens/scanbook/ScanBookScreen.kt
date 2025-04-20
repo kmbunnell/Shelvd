@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.shelvd.R
+import com.ladykbear.shelvd.R
 import com.shelvd.data.model.ShelvedBook
 
 
