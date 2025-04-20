@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -65,6 +67,10 @@ dependencies {
     implementation (libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.resources)
     implementation (libs.ktor.client.logging)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.room.runtime)
