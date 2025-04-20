@@ -38,7 +38,7 @@ class ScanFoundBookVmTest {
     }
 
     private val mockIsbnLookUpUseCase = mock<IsbnLookUpUseCase>() {
-        on { invoke("12345") }.thenReturn(flow {
+        onBlocking { invoke("12345") }.thenReturn(flow {
             emit(shelvedBook)
         })
     }
