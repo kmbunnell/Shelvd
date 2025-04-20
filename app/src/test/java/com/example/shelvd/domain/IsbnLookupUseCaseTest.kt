@@ -23,7 +23,7 @@ class IsbnLookupUseCaseTest {
         "A Court of Thorns and Roses", isbn = "isbn", Shelf.WANT
     )
     val bookRepository = mock<BookRepository>() {
-        on { lookUpBookByISBN("isbn") }.thenReturn(flow {
+        onBlocking { lookUpBookByISBN("isbn") }.thenReturn(flow {
             emit(shelvedBook)
         })
     }
